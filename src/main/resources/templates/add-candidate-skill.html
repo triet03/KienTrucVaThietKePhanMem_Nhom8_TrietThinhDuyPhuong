@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Add Candidate Skill</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			line-height: 1.6;
+			margin: 0;
+			padding: 0;
+			background-color: #f4f4f9;
+			color: #333;
+		}
+
+		header {
+			background-color: #007bff;
+			color: #fff;
+			padding: 15px 0;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		nav {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 20px;
+		}
+
+		nav a {
+			color: #fff;
+			text-decoration: none;
+			font-size: 18px;
+			font-weight: bold;
+		}
+
+		nav ul {
+			list-style-type: none;
+			display: flex;
+			margin: 0;
+			padding: 0;
+		}
+
+		nav ul li {
+			margin: 0 15px;
+		}
+
+		nav ul li a {
+			color: #fff;
+			text-decoration: none;
+			transition: color 0.3s ease;
+		}
+
+		nav ul li a:hover {
+			color: #f8d210;
+		}
+
+		h2 {
+			text-align: center;
+			margin: 20px 0;
+			color: #007bff;
+		}
+
+		form {
+			max-width: 600px;
+			margin: 20px auto;
+			background: #fff;
+			padding: 20px;
+			border-radius: 8px;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		form div {
+			margin-bottom: 15px;
+		}
+
+		form label {
+			display: block;
+			font-weight: bold;
+			margin-bottom: 5px;
+		}
+
+		form input, form select {
+			width: 100%;
+			padding: 10px;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			box-sizing: border-box;
+		}
+
+		button {
+			background-color: #007bff;
+			color: #fff;
+			border: none;
+			padding: 10px 20px;
+			font-size: 16px;
+			border-radius: 4px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+		button:hover {
+			background-color: #0056b3;
+		}
+
+		a {
+			display: inline-block;
+			margin-top: 10px;
+			color: #007bff;
+			text-decoration: none;
+			transition: color 0.3s ease;
+		}
+
+		a:hover {
+			color: #0056b3;
+		}
+	</style>
+</head>
+<body>
+
+<header>
+	<nav>
+		<a href="/home">Trang Chủ</a>
+		<ul>
+			<li><a href="/candidates">Ứng viên</a></li>
+			<li><a href="/companies">Công ty</a></li>
+			<li><a href="/jobs">Công việc</a></li>
+			<li><a href="/skills">Kỹ năng</a></li>
+		</ul>
+	</nav>
+</header>
+
+<h2>Add Candidate Skill</h2>
+
+<form th:action="@{/candidate-skills}" method="post">
+	<div>
+		<label>Candidate:</label>
+		<select name="candidateId">
+			<option value="">Select Candidate</option>
+			<option th:each="candidate : ${candidates}" th:value="${candidate.canId}" th:text="${candidate.fullName}"></option>
+		</select>
+	</div>
+	<div>
+		<label>Skill:</label>
+		<select name="skillId">
+			<option value="">Select Skill</option>
+			<option th:each="skill : ${skills}" th:value="${skill.skillId}" th:text="${skill.skillName}"></option>
+		</select>
+	</div>
+	<div>
+		<label>Skill Level:</label>
+		<input type="text" name="skillLevel" placeholder="Enter skill level" />
+	</div>
+	<div>
+		<label>More Infos:</label>
+		<input type="text" name="moreInfos" placeholder="Enter additional info" />
+	</div>
+	<button type="submit">Add Candidate Skill</button>
+</form>
+
+<a href="/candidate-skills">Back to Candidate Skill List</a>
+
+</body>
+</html>

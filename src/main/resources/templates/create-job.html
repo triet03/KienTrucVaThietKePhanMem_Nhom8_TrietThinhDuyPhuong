@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Create Job</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f4;
+			margin: 0;
+			padding: 0;
+		}
+		header {
+			background-color: #007bff;
+			padding: 15px 0;
+			color: white;
+		}
+		nav {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 20px;
+		}
+		nav a {
+			color: white;
+			font-size: 18px;
+			text-decoration: none;
+		}
+		nav a:hover {
+			text-decoration: underline;
+		}
+		h2 {
+			text-align: center;
+			margin-top: 30px;
+			font-size: 32px;
+			color: #333;
+		}
+		form {
+			background-color: white;
+			padding: 30px;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			max-width: 800px;
+			margin: 20px auto;
+		}
+		label {
+			font-size: 16px;
+			color: #333;
+			display: block;
+			margin-bottom: 8px;
+		}
+		input, select {
+			width: 100%;
+			padding: 12px;
+			margin-bottom: 20px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			font-size: 16px;
+		}
+		select {
+			font-size: 14px;
+		}
+		button {
+			background-color: #007bff;
+			color: white;
+			padding: 12px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 16px;
+			transition: background-color 0.3s;
+		}
+		button:hover {
+			background-color: #0056b3;
+		}
+		a {
+			display: block;
+			text-align: center;
+			margin-top: 20px;
+			color: #007bff;
+			font-size: 18px;
+			text-decoration: none;
+		}
+		a:hover {
+			text-decoration: underline;
+		}
+	</style>
+</head>
+<body>
+
+<header>
+	<nav>
+		<a href="/home">Trang Chủ</a>
+		<ul style="display: flex; list-style-type: none; margin: 0; padding: 0;">
+			<li style="margin: 0 15px;"><a href="/candidates">Ứng viên</a></li>
+			<li style="margin: 0 15px;"><a href="/companies">Công ty</a></li>
+			<li style="margin: 0 15px;"><a href="/jobs">Công việc</a></li>
+			<li style="margin: 0 15px;"><a href="/skills">Kỹ năng</a></li>
+		</ul>
+	</nav>
+</header>
+
+<h2>Create Job</h2>
+
+<form th:action="@{/jobs/save}" method="post">
+	<div>
+		<label for="jobName">Job Name:</label>
+		<input type="text" name="jobName" id="jobName" required />
+	</div>
+	<div>
+		<label for="jobDesc">Job Description:</label>
+		<input type="text" name="jobDesc" id="jobDesc" required />
+	</div>
+	<div>
+		<label for="company">Company:</label>
+		<select name="company.comId" id="company" required>
+			<option value="">Select Company</option>
+			<option th:each="company : ${companies}" th:value="${company.comId}"
+					th:text="${company.compName}"></option>
+		</select>
+	</div>
+	<div>
+		<label for="skills">Skills:</label>
+		<select name="skillIds" id="skills" multiple required>
+			<option th:each="skill : ${skills}" th:value="${skill.skillId}"
+					th:text="${skill.skillName}"></option>
+		</select>
+	</div>
+	<button type="submit">Create Job</button>
+</form>
+
+<a href="/jobs">Back to Job List</a>
+
+</body>
+</html>

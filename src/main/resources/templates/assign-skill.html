@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Assign Skill to Candidate</title>
+</head>
+<body>
+	<header style="background-color: #f8f9fa; padding: 10px 0;">
+		<nav
+			style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+			<a href="/home"
+				style="font-size: 24px; font-weight: bold; color: #007bff; text-decoration: none;">Trang
+				Chủ</a>
+			<ul
+				style="display: flex; list-style-type: none; margin: 0; padding: 0;">
+
+				<li style="margin: 0 15px;"><a href="/candidates"
+					style="text-decoration: none; color: #333; font-size: 18px;">Ứng
+						viên</a></li>
+				<li style="margin: 0 15px;"><a href="/companies"
+					style="text-decoration: none; color: #333; font-size: 18px;">Công
+						ty</a></li>
+				<li style="margin: 0 15px;"><a href="/jobs"
+					style="text-decoration: none; color: #333; font-size: 18px;">Công
+						việc</a></li>
+				<li style="margin: 0 15px;"><a href="/skills"
+					style="text-decoration: none; color: #333; font-size: 18px;">Kỹ
+						năng</a></li>
+			</ul>
+		</nav>
+	</header>
+	<h2>Assign Skill to Candidate</h2>
+	<form th:action="@{/skills/assign}" method="post">
+		<div>
+			<label>Candidate:</label> <select name="candidateId">
+				<option value="">Select Candidate</option>
+				<option th:each="candidate : ${candidates}"
+					th:value="${candidate.canId}" th:text="${candidate.fullName}"></option>
+			</select>
+		</div>
+		<div>
+			<label>Skill:</label> <select name="skillId">
+				<option value="">Select Skill</option>
+				<option th:each="skill : ${skills}" th:value="${skill.skillId}"
+					th:text="${skill.skillName}"></option>
+			</select>
+		</div>
+		<div>
+			<label>Skill Level:</label> <input type="text" name="skillLevel" />
+		</div>
+		<div>
+			<label>More Infos:</label> <input type="text" name="moreInfos" />
+		</div>
+		<button type="submit">Assign Skill</button>
+	</form>
+	<a href="/skills">Back to Skill List</a>
+</body>
+</html>
