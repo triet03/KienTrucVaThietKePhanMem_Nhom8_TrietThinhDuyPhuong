@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Tin Đăng</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #007bff;
+            padding: 15px 30px;
+            color: white;
+        }
+
+        .header .logo {
+            color: white;
+            font-size: 1.5em;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .header nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .header nav ul li {
+            margin: 0 15px;
+        }
+
+        .header nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .user-info .logout {
+            color: white;
+            margin-left: 15px;
+            text-decoration: none;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+
+        .sidebar h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .sidebar ul li a:hover {
+            color: #007bff;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: white;
+            background: #28a745;
+            border-radius: 3px;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <a href="/homeCompany" class="logo">Trang Chủ</a>
+    <nav>
+        <ul>
+            <li><a href="#">Bảng giá & Khuyến mãi</a></li>
+            <li><a href="#">Đăng tin miễn phí</a></li>
+            <li><a href="#">Tìm ứng viên</a></li>
+            <li><a href="#">Trợ giúp</a></li>
+        </ul>
+    </nav>
+    <div class="user-info">
+        <img src="https://cdn1.vieclam24h.vn/images/public/2024/05/15/dummy_company_171575798548.png" class="avatar" alt="User">
+        <span>Getvini</span>
+        <a href="#" class="logout">Đăng xuất</a>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <h3>Quản lý tin tuyển dụng</h3>
+        <ul>
+            <li><a href="/jobs">Quản lý Tin Đăng</a></li>
+        </ul>
+    </nav>
+
+    <!-- Nội dung chính -->
+    <main class="content">
+        <h2>Danh sách tin tuyển dụng</h2>
+        <a th:href="@{/jobs/new}" class="btn">Thêm Tin Đăng</a>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tiêu đề</th>
+                <th>Mô tả</th>
+                <th>Ngày đăng</th>
+                <th>Kỹ năng</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="job : ${jobs}">
+                <td th:text="${job.id}">1</td>
+                <td th:text="${job.title}">Java Developer</td>
+                <td th:text="${job.description}">Xây dựng backend Java</td>
+                <td th:text="${#dates.format(job.createdAt, 'dd/MM/yyyy')}">01/04/2025</td>
+                <td>
+                    <ul style="padding-left: 16px; margin: 0;">
+                        <li th:each="skill : ${job.skills}" th:text="${skill.skillName}">Java</li>
+                    </ul>
+                </td>
+                <td th:text="${job.status}">Đang tuyển</td>
+                <td>
+                    <a th:href="@{/jobs/edit/{id}(id=${job.id})}" class="btn">Sửa</a>
+                    <a th:href="@{/jobs/delete/{id}(id=${job.id})}" class="btn btn-delete" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+
+</div>
+
+</body>
+</html>
