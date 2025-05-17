@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Danh Sách Kỹ Năng</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f4;
+			margin: 0;
+			padding: 0;
+		}
+		header {
+			background-color: #007bff;
+			padding: 15px 0;
+			color: white;
+		}
+		nav {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 20px;
+		}
+		nav a {
+			color: white;
+			font-size: 18px;
+			text-decoration: none;
+		}
+		nav a:hover {
+			text-decoration: underline;
+		}
+		h2 {
+			text-align: center;
+			margin-top: 30px;
+			font-size: 36px;
+			color: #333;
+		}
+		a {
+			display: block;
+			text-align: center;
+			background-color: #28a745;
+			color: white;
+			padding: 10px 20px;
+			font-size: 18px;
+			border-radius: 4px;
+			text-decoration: none;
+			margin: 20px auto;
+			max-width: 200px;
+		}
+		a:hover {
+			background-color: #218838;
+		}
+		ul {
+			list-style-type: none;
+			padding: 0;
+			margin: 30px auto;
+			max-width: 600px;
+		}
+		li {
+			background-color: white;
+			margin: 10px 0;
+			padding: 12px;
+			border-radius: 5px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
+		li span {
+			font-size: 18px;
+			color: #333;
+		}
+	</style>
+</head>
+<body>
+
+<header>
+	<nav>
+		<a href="/home">Trang Chủ</a>
+		<ul style="display: flex; list-style-type: none; margin: 0; padding: 0;">
+			<li style="margin: 0 15px;"><a href="/candidates">Ứng viên</a></li>
+			<li style="margin: 0 15px;"><a href="/companies">Công ty</a></li>
+			<li style="margin: 0 15px;"><a href="/jobs">Công việc</a></li>
+			<li style="margin: 0 15px;"><a href="/skills">Kỹ năng</a></li>
+		</ul>
+	</nav>
+</header>
+
+<h2>Danh Sách Kỹ Năng</h2>
+
+<ul>
+	<li th:each="skill : ${skills}">
+		<span th:text="${skill.skillName}">Tên Kỹ Năng</span>
+	</li>
+</ul>
+
+<a href="/skills/add">Thêm Kỹ Năng</a>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Thêm Công Ty Mới</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f4;
+			margin: 0;
+			padding: 0;
+		}
+		header {
+			background-color: #007bff;
+			padding: 15px 0;
+			color: white;
+		}
+		nav {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 20px;
+		}
+		nav a {
+			color: white;
+			font-size: 18px;
+			text-decoration: none;
+		}
+		nav a:hover {
+			text-decoration: underline;
+		}
+		h1 {
+			text-align: center;
+			margin-top: 20px;
+			font-size: 32px;
+			color: #333;
+		}
+		form {
+			background-color: white;
+			padding: 30px;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			max-width: 800px;
+			margin: 20px auto;
+		}
+		label {
+			font-size: 16px;
+			color: #333;
+			display: block;
+			margin-bottom: 8px;
+		}
+		input, textarea {
+			width: 100%;
+			padding: 12px;
+			margin-bottom: 20px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			font-size: 16px;
+		}
+		input[type="text"], input[type="email"], input[type="number"], textarea {
+			font-size: 14px;
+		}
+		button {
+			background-color: #007bff;
+			color: white;
+			padding: 12px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 16px;
+			transition: background-color 0.3s;
+		}
+		button:hover {
+			background-color: #0056b3;
+		}
+	</style>
+</head>
+<body>
+<header>
+	<nav>
+		<a href="/home">Trang Chủ</a>
+		<ul style="display: flex; list-style-type: none; margin: 0; padding: 0;">
+			<li style="margin: 0 15px;"><a href="/candidates">Ứng viên</a></li>
+			<li style="margin: 0 15px;"><a href="/companies">Công ty</a></li>
+			<li style="margin: 0 15px;"><a href="/jobs">Công việc</a></li>
+			<li style="margin: 0 15px;"><a href="/skills">Kỹ năng</a></li>
+		</ul>
+	</nav>
+</header>
+
+<h1>Thêm Công Ty Mới</h1>
+
+<form th:action="@{/companies/save}" th:object="${company}" method="post">
+	<label for="compName">Tên Công Ty:</label>
+	<input type="text" id="compName" th:field="*{compName}" required>
+
+	<label for="about">Mô Tả:</label>
+	<textarea id="about" th:field="*{about}" required></textarea>
+
+	<label for="email">Email:</label>
+	<input type="email" id="email" th:field="*{email}" required>
+
+	<label for="phone">Số Điện Thoại:</label>
+	<input type="text" id="phone" th:field="*{phone}" required>
+
+	<label for="webUrl">Website:</label>
+	<input type="text" id="webUrl" th:field="*{webUrl}" required>
+
+	<label for="address">Địa Chỉ:</label>
+	<input type="text" id="address" th:field="*{address.street}" required>
+	<input type="text" id="city" th:field="*{address.city}" required>
+	<input type="text" id="zipcode" th:field="*{address.zipcode}" required>
+	<input type="text" id="country" th:field="*{address.country}" required>
+
+	<button type="submit">Lưu</button>
+</form>
+</body>
+</html>

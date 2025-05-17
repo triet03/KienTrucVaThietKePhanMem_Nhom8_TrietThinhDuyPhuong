@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quản lý Hồ sơ Ứng tuyển</title>
+    <style>
+        * {
+            margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #007bff;
+            padding: 15px 30px;
+            color: white;
+        }
+        .header .logo {
+            color: white;
+            font-size: 1.5em;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .header nav ul {
+            list-style: none;
+            display: flex;
+        }
+        .header nav ul li {
+            margin: 0 15px;
+        }
+        .header nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .user-info .logout {
+            color: white;
+            margin-left: 15px;
+            text-decoration: none;
+        }
+        /* Layout */
+        .container {
+            display: flex;
+            flex: 1;
+        }
+        .sidebar {
+            width: 250px;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+        .sidebar h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+        }
+        .sidebar ul li a:hover {
+            color: #007bff;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        .btn {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: white;
+            background: #28a745;
+            border-radius: 3px;
+            font-size: 0.9em;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #218838;
+        }
+        .btn-delete {
+            background: #dc3545;
+        }
+        .btn-delete:hover {
+            background: #c82333;
+        }
+        .search-box {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .search-box button {
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .search-box button:hover {
+            background: #0056b3;
+        }
+        /* Ảnh CV */
+        .cv-thumb {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 5px;
+            position: relative;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+        }
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+        .modal-content p {
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<div class="header">
+    <a href="/homeCompany" class="logo">Trang Chủ</a>
+    <nav>
+        <ul>
+            <li><a href="#">Bảng giá & Khuyến mãi</a></li>
+            <li><a href="#">Đăng tin miễn phí</a></li>
+            <li><a href="#">Tìm ứng viên</a></li>
+            <li><a href="#">Trợ giúp</a></li>
+        </ul>
+    </nav>
+    <div class="user-info">
+        <img src="https://cdn1.vieclam24h.vn/images/public/2024/05/15/dummy_company_171575798548.png" class="avatar" alt="User" />
+        <span>Getvini</span>
+        <a href="#" class="logout">Đăng xuất</a>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <h3>Quản lý tài khoản</h3>
+        <ul>
+            <li><a href="#">Tài khoản của bạn</a></li>
+        </ul>
+        <h3>Quản lý hồ sơ</h3>
+        <ul>
+            <li><a href="#">Hồ sơ của bạn</a></li>
+            <li><a href="#">Trang trí CV</a></li>
+        </ul>
+        <h3>Quản lý nhà tuyển dụng</h3>
+        <ul>
+            <li><a href="/companyManager/dangTinTuyenDung">Đăng tin tuyển dụng</a></li>
+            <li><a href="/companyManager/dangKyGoiTin">Đăng ký gói tin</a></li>
+            <li><a href="/companyManager/hoSoUngTuyen">Xem hồ sơ ứng tuyển</a></li>
+            <li><a href="/companyManager/quanLyThongTinNhaTuyenDung">Quản lý thông tin nhà tuyển dụng</a></li>
+        </ul>
+    </nav>
+
+    <!-- Nội dung chính -->
+    <main class="content">
+        <h2>Hồ sơ ứng tuyển</h2>
+        <!-- Tìm kiếm -->
+        <div class="search-box">
+            <input type="text" placeholder="Nhập từ khóa..." id="searchInput" />
+            <button type="button" id="searchBtn">Tìm kiếm</button>
+        </div>
+
+        <!-- Bảng danh sách ứng tuyển -->
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Vị trí</th>
+                <th>Công ty</th>
+                <th>Ngày ứng tuyển</th>
+                <th>Trạng thái</th>
+                <th>Ảnh CV</th>
+                <th>Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="app, iterStat : ${applications}">
+                <td th:text="${iterStat.count}"></td>
+                <td th:text="${app.position}"></td>
+                <td th:text="${app.company}"></td>
+                <td th:text="${app.dateApplied}"></td>
+                <td th:text="${app.status}"></td>
+                <td>
+                    <img th:if="${app.cvFileName != null}"
+                         th:src="@{/uploads/${app.cvFileName}}"
+                         alt="Ảnh CV" class="cv-thumb"
+                         onerror="this.onerror=null; this.src='/images/placeholder.png'; this.alt='Ảnh không tải được';" />
+                    <span th:if="${app.cvFileName == null}">Chưa có ảnh</span>
+                </td>
+                <td>
+                    <button class="btn view-btn"
+                            th:attr="data-fullname=${app.fullName},
+                                     data-email=${app.email},
+                                     data-phone=${app.phone},
+                                     data-position=${app.position},
+                                     data-company=${app.company},
+                                     data-experience=${app.experience != null} ? ${app.experience} : '',
+                                     data-skills=${app.skills != null} ? ${app.skills} : '',
+                                     data-coverletter=${app.coverLetter != null} ? ${app.coverLetter} : '',
+                                     data-dateapplied=${app.dateApplied},
+                                     data-status=${app.status},
+                                     data-cvfilename=${app.cvFileName != null} ? '/uploads/' + ${app.cvFileName} : ''"
+                            onclick="showModal(this)">Xem</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Modal xem chi tiết -->
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Chi tiết Hồ sơ Ứng tuyển</h2>
+                <p><strong>Họ và Tên:</strong> <span id="modalFullName"></span></p>
+                <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+                <p><strong>Số điện thoại:</strong> <span id="modalPhone"></span></p>
+                <p><strong>Vị trí:</strong> <span id="modalPosition"></span></p>
+                <p><strong>Công ty:</strong> <span id="modalCompany"></span></p>
+                <p><strong>Kinh nghiệm:</strong> <span id="modalExperience"></span></p>
+                <p><strong>Kỹ năng:</strong> <span id="modalSkills"></span></p>
+                <p><strong>Thư ứng tuyển:</strong> <span id="modalCoverLetter"></span></p>
+                <p><strong>Ngày ứng tuyển:</strong> <span id="modalDateApplied"></span></p>
+                <p><strong>Trạng thái:</strong> <span id="modalStatus"></span></p>
+                <p><strong>Ảnh CV:</strong></p>
+                <img id="modalCvImage" src="" alt="Ảnh CV" style="display: none;" />
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function showModal(button) {
+        // Lấy dữ liệu từ thuộc tính data-*
+        const fullName = button.getAttribute('data-fullname') || 'N/A';
+        const email = button.getAttribute('data-email') || 'N/A';
+        const phone = button.getAttribute('data-phone') || 'N/A';
+        const position = button.getAttribute('data-position') || 'N/A';
+        const company = button.getAttribute('data-company') || 'N/A';
+        const experience = button.getAttribute('data-experience') || 'N/A';
+        const skills = button.getAttribute('data-skills') || 'N/A';
+        const coverLetter = button.getAttribute('data-coverletter') || 'N/A';
+        const dateApplied = button.getAttribute('data-dateapplied') || 'N/A';
+        const status = button.getAttribute('data-status') || 'N/A';
+        const cvFileName = button.getAttribute('data-cvfilename') || '';
+
+        // Điền dữ liệu vào modal
+        document.getElementById('modalFullName').textContent = fullName;
+        document.getElementById('modalEmail').textContent = email;
+        document.getElementById('modalPhone').textContent = phone;
+        document.getElementById('modalPosition').textContent = position;
+        document.getElementById('modalCompany').textContent = company;
+        document.getElementById('modalExperience').textContent = experience;
+        document.getElementById('modalSkills').textContent = skills;
+        document.getElementById('modalCoverLetter').textContent = coverLetter;
+        document.getElementById('modalDateApplied').textContent = dateApplied;
+        document.getElementById('modalStatus').textContent = status;
+
+        const cvImage = document.getElementById('modalCvImage');
+        if (cvFileName) {
+            cvImage.src = cvFileName;
+            cvImage.style.display = 'block';
+        } else {
+            cvImage.style.display = 'none';
+        }
+
+        // Hiển thị modal
+        document.getElementById('viewModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('viewModal').style.display = 'none';
+    }
+
+    // Đóng modal khi click bên ngoài
+    window.onclick = function(event) {
+        const modal = document.getElementById('viewModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>
