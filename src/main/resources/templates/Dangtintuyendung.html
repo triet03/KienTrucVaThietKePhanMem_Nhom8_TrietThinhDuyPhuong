@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Tin Đăng</title>
+    <title>Đăng Tin Tuyển Dụng</title>
     <style>
         * {
             margin: 0;
@@ -16,9 +16,9 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            background-color: #f4f7fb;
         }
 
-        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -26,27 +26,34 @@
             background: #007bff;
             padding: 15px 30px;
             color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .header .logo {
-            color: white;
-            font-size: 1.5em;
-            text-decoration: none;
+            font-size: 1.8em;
             font-weight: bold;
+            text-decoration: none;
+            color: white;
         }
 
         .header nav ul {
-            list-style: none;
             display: flex;
+            list-style: none;
         }
 
         .header nav ul li {
-            margin: 0 15px;
+            margin: 0 20px;
         }
 
         .header nav ul li a {
             color: white;
             text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .header nav ul li a:hover {
+            color: #ffde00;
         }
 
         .user-info {
@@ -55,33 +62,46 @@
         }
 
         .user-info .avatar {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
-            margin-right: 10px;
+            margin-right: 12px;
+        }
+
+        .user-info span {
+            margin-right: 12px;
         }
 
         .user-info .logout {
             color: white;
-            margin-left: 15px;
             text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
         }
 
-        /* Layout */
+        .user-info .logout:hover {
+            color: #ffde00;
+        }
+
         .container {
             display: flex;
             flex: 1;
+            margin-top: 20px;
         }
 
         .sidebar {
             width: 250px;
             background: #f8f9fa;
             padding: 20px;
+            border-right: 1px solid #ddd;
+            border-radius: 8px 0 0 8px;
         }
 
         .sidebar h3 {
             color: #007bff;
-            margin-bottom: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
         }
 
         .sidebar ul {
@@ -89,24 +109,58 @@
         }
 
         .sidebar ul li {
-            margin: 10px 0;
+            margin: 15px 0;
         }
 
         .sidebar ul li a {
             text-decoration: none;
             color: #333;
+            font-weight: 500;
+            display: block;
+            padding: 8px;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 4px;
         }
 
         .sidebar ul li a:hover {
-            color: #007bff;
+            background-color: #007bff;
+            color: white;
         }
 
         .content {
             flex: 1;
-            padding: 20px;
+            padding: 30px;
         }
 
-        /* Table */
+        .content h2 {
+            font-size: 2em;
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 1.1em;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -123,27 +177,20 @@
         }
 
         th {
-            background: #007bff;
+            background-color: #007bff;
             color: white;
         }
 
-        .btn {
-            padding: 5px 10px;
-            text-decoration: none;
-            color: white;
-            background: #28a745;
-            border-radius: 3px;
-        }
-
-        .btn-delete {
-            background: #dc3545;
+        ul {
+            padding-left: 20px;
+            margin: 0;
         }
     </style>
 </head>
 <body>
 
 <!-- Header -->
-<div class="header">
+<header class="header">
     <a href="/homeCompany" class="logo">Trang Chủ</a>
     <nav>
         <ul>
@@ -158,38 +205,68 @@
         <span>Getvini</span>
         <a href="#" class="logout">Đăng xuất</a>
     </div>
-</div>
+</header>
 
+<!-- Main layout -->
 <div class="container">
     <!-- Sidebar -->
-    <nav class="sidebar">
+    <aside class="sidebar">
         <h3>Quản lý tin tuyển dụng</h3>
         <ul>
-            <li><a href="/jobs">Quản lý Tin Đăng</a></li>
+            <li><a href="/jobs">Đăng Tin Tuyển Dụng</a></li>
+            <li><a href="/admin/jobs">Quản lý duyệt tin (Admin)</a></li>
         </ul>
-    </nav>
+    </aside>
 
-    <!-- Nội dung chính -->
+    <!-- Content -->
     <main class="content">
-        <h2>Danh sách tin tuyển dụng</h2>
-        <a th:href="@{/jobs/add}" class="btn">Thêm Tin Đăng</a>
-        <table>
+        <h2>Đăng Tin Tuyển Dụng</h2>
+        <a th:href="@{/jobs/new}" class="btn">Thêm Tin Đăng</a>
+
+        <!-- Debug -->
+        <div>
+            <p style="color: blue;">Debug: Số lượng công việc: <span th:text="${jobs != null ? jobs.size() : 0}"></span></p>
+        </div>
+
+        <!-- No jobs -->
+        <div th:if="${jobs == null or jobs.isEmpty()}">
+            <p style="color: red;">Chưa có tin tuyển dụng nào. Vui lòng thêm tin mới.</p>
+        </div>
+
+        <!-- Job Table -->
+        <table th:unless="${jobs == null or jobs.isEmpty()}">
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Tiêu đề</th>
-                <th>Mô tả</th>
+                <th>Tên công việc</th>
+                <th>Mô tả công việc</th>
+                <th>Công ty</th>
+                <th>Email nhà tuyển dụng</th>
+                <th>Lương</th>
+                <th>Kỹ năng</th>
+                <th>Trạng thái</th>
                 <th>Hành động</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="job : ${jobs}">
-                <td th:text="${job.id}"></td>
-                <td th:text="${job.title}"></td>
-                <td th:text="${job.description}"></td>
+                <td th:text="${job.jobId}"></td>
+                <td th:text="${job.jobName} ?: 'Chưa xác định'"></td>
+                <td th:text="${job.jobDesc} ?: 'Chưa xác định'"></td>
+                <td th:text="${job.company?.compName} ?: 'Chưa xác định'"></td>
+                <td th:text="${job.company?.email} ?: 'Chưa xác định'"></td>
+                <td th:text="${job.salary != null} ? ${#numbers.formatInteger(job.salary, 0, 'COMMA')} + ' VND' : 'Chưa xác định'"></td>
                 <td>
-                    <a th:href="@{/jobs/edit/{id}(id=${job.id})}" class="btn">Sửa</a>
-                    <a th:href="@{/jobs/delete/{id}(id=${job.id})}" class="btn btn-delete">Xóa</a>
+                    <ul>
+                        <li th:each="jobSkill : ${job.jobSkills}" th:text="${jobSkill.skill?.skillName} ?: 'Chưa xác định'"></li>
+                        <li th:if="${job.jobSkills == null or job.jobSkills.isEmpty()}">Chưa có kỹ năng</li>
+                    </ul>
+                </td>
+                <td>Đang chờ duyệt</td>
+                <td>
+                    <a th:href="@{/jobs/edit/{id}(id=${job.jobId})}" class="btn">Sửa</a>
+                    <a th:href="@{/jobs/delete/{id}(id=${job.jobId})}" class="btn btn-delete"
+                       onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
                 </td>
             </tr>
             </tbody>

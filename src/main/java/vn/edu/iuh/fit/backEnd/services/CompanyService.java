@@ -10,45 +10,58 @@ import java.util.Optional;
 
 @Service
 public class CompanyService {
-	 @Autowired
-	    private CompanyRepository companyRepository;
+
+	@Autowired
+	private CompanyRepository companyRepository;
 
 	public static void sendEmail(String email, String subject, String text) {
+		// Placeholder: Implement email sending logic if needed
 	}
 
 	public List<Company> getAllCompanies() {
-	        return companyRepository.findAll();
-	    }
+		return companyRepository.findAll();
+	}
 
-	    public Company getCompanyById(Long id) {
-	        Optional<Company> company = companyRepository.findById(id);
-	        if (company.isPresent()) {
-	            return company.get();
-	        } else {
+	public Company getCompanyById(Long id) {
+		return companyRepository.findById(id)
+				.orElse(null); // Có thể thay bằng throw new NotFoundException() nếu muốn rõ ràng
+	}
 
-	            return null;  // Hoặc bạn có thể tạo một ngoại lệ tùy chỉnh nếu cần
-	        }
-	    }
+	public Company getCompanyByName(String name) {
+		return companyRepository.findByCompName(name);
+	}
 
+	public Company createCompany(Company company) {
+		return companyRepository.save(company);
+	}
 
-	    public Company createCompany(Company company) {
-	        return companyRepository.save(company);
-	    }
+	public Company updateCompany(Long id, Company companyDetails) {
+		Company company = getCompanyById(id);
+		if (company == null) {
+			throw new RuntimeException("Company not found with id " + id);
+		}
 
-	    public Company updateCompany(Long id, Company companyDetails) {
-	        Company company = getCompanyById(id);
-	        company.setCompName(companyDetails.getCompName());
-	        company.setAbout(companyDetails.getAbout());
-	        company.setEmail(companyDetails.getEmail());
-	        company.setPhone(companyDetails.getPhone());
-	        company.setWebUrl(companyDetails.getWebUrl());
-	        company.setAddress(companyDetails.getAddress());
-	        return companyRepository.save(company);
-	    }
+		company.setCompName(companyDetails.getCompName());
+		company.setAbout(companyDetails.getAbout());
+		company.setEmail(companyDetails.getEmail());
+		company.setPhone(companyDetails.getPhone());
+		company.setWebUrl(companyDetails.getWebUrl());
 
-	    public void deleteCompany(Long id) {
-	        Company company = getCompanyById(id);
-	        companyRepository.delete(company);
-	    }
+		if (company.getAddress() != null && companyDetails.getAddress() != null) {
+			company.getAddress().setAddId(companyDetails.getAddress().getAddId());
+		} else {
+			company.setAddress(companyDetails.getAddress());
+		}
+
+		return companyRepository.save(company);
+	}
+
+	public void deleteCompany(Long id) {
+		Company company = getCompanyById(id);
+		if (company != null) {
+			companyRepository.delete(company);
+		} else {
+			throw new RuntimeException("Company not found to delete with id " + id);
+		}
+	}
 }
-

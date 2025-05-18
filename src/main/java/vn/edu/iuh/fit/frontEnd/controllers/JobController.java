@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.iuh.fit.backEnd.enums.JobStatus;
+import vn.edu.iuh.fit.backEnd.models.Company;
 import vn.edu.iuh.fit.backEnd.models.Job;
 import vn.edu.iuh.fit.backEnd.models.Skill;
 import vn.edu.iuh.fit.backEnd.services.CandidateRecommendationService;
@@ -13,6 +15,7 @@ import vn.edu.iuh.fit.backEnd.services.SkillService;
 import vn.edu.iuh.fit.backEnd.models.JobSkill;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -37,13 +40,15 @@ public class JobController {
 
     @PostMapping("/save")
     public String saveJob(@ModelAttribute Job job, @RequestParam List<Long> skillIds) {
-        jobService.createJobWithSkills(job, skillIds);
-        return "redirect:/jobs";
+        job.setStatus(JobStatus.valueOf("PENDING")); // Đặt trạng thái là "PENDING"
+        jobService.createJobWithSkills(job, skillIds);  // Lưu công việc với kỹ năng
+        return "redirect:/jobs/pending";  // Chuyển hướng đến trang công việc đang chờ duyệt
     }
+
 
     @GetMapping
     public String getAllJobs(Model model) {
-        model.addAttribute("jobs", jobService.getAllJobs());
+        model.addAttribute("jobs", jobService.getApprovedJobs());
         return "job-list";
     }
 
@@ -83,5 +88,51 @@ public class JobController {
 
         return "job-details"; // Đảm bảo tên view trùng với file HTML
     }
+
+    @GetMapping("/pending")
+    public String getPendingJobs(Model model) {
+        List<Job> pendingJobs = jobService.getPendingJobs();  // Lấy công việc đang chờ duyệt
+        model.addAttribute("jobs", pendingJobs);
+        return "Dangtintuyendung"; // Đảm bảo tên view là "Dangtintuyendung"
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable("id") Long jobId, Model model) {
+        Job job = jobService.getJobById(jobId);
+        if (job == null) {
+            return "redirect:/jobs/pending"; // Nếu job không tồn tại, quay lại danh sách
+        }
+        model.addAttribute("job", job);
+        model.addAttribute("companies", companyService.getAllCompanies());
+        model.addAttribute("skills", skillService.getAllSkills());
+        // Lấy danh sách skillId hiện tại của job
+        List<Long> selectedSkillIds = job.getJobSkills().stream()
+                .map(jobSkill -> jobSkill.getSkill().getSkillId())
+                .toList();
+        model.addAttribute("selectedSkillIds", selectedSkillIds);
+        return "edit-job"; // Tên template form chỉnh sửa
+    }
+
+    @PostMapping("/update")
+    public String updateJob(@ModelAttribute Job job,
+                            @RequestParam Long companyId,
+                            @RequestParam(required = false) List<Long> skillIds) {
+        // Gán công ty
+        Company company = companyService.getCompanyById(companyId);
+        job.setCompany(company);
+        // Đặt trạng thái PENDING
+        job.setStatus(JobStatus.PENDING);
+        // Cập nhật job và kỹ năng
+        jobService.updateJobWithSkills(job.getJobId(), job, skillIds != null ? skillIds : new ArrayList<>());
+        return "redirect:/jobs/pending";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteJob(@PathVariable("id") Long jobId) {
+        System.out.println("Xóa job ID: " + jobId); // Log để debug
+        jobService.deleteJob(jobId);
+        return "redirect:/jobs/pending";
+    }
+
 
 }

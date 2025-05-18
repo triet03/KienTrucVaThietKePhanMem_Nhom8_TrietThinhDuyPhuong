@@ -17,7 +17,7 @@ import vn.edu.iuh.fit.backEnd.services.CompanyDetailsService;
 public class SecurityConfig {
 
     private final CompanyDetailsService companyDetailsService;
-    private final PasswordEncoder passwordEncoder; // Inject PasswordEncoder từ AppConfig
+    private final PasswordEncoder passwordEncoder;
 
     public SecurityConfig(CompanyDetailsService companyDetailsService, PasswordEncoder passwordEncoder) {
         this.companyDetailsService = companyDetailsService;
@@ -28,13 +28,24 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/companyManager", "/companyManager/**", "/{id}", "/verify", "/homeCompany", "/verify/company", "/register/**", "/login/**", "/homeCandidate", "/jobs", "/jobs/**", "/css/**", "/js/**").permitAll()
-                        .requestMatchers("/company_mangement").authenticated()
+                        .requestMatchers(
+                                "/", "/register/company", "/register/**",
+                                "/verify/company", "/verify", "/login/**",
+                                "/homeCompany", "/homeCandidate",
+                                "/jobs", "/jobs/**",
+                                "/candidates/{id}", "/{id}",
+                                "/css/**", "/js/**", "/images/**",
+                                "/companyManager/**", // Cho phép tất cả endpoint /companyManager/**
+                                "/admin/jobs", "/admin/jobs/approve/{id}", "/admin/jobs/reject/{id}",
+                                "/ungVien/**", "/update", "/delete/{id}", "/edit/{id}",
+                                "/apply", "/uploads/**", "/ungVien/nop-ho-so",
+                                "/job-list" // Thêm /job-list để đảm bảo redirect hoạt động
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login/company")
-                        .defaultSuccessUrl("/companyManage", true)
+                        .defaultSuccessUrl("/companyManager", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -55,12 +66,12 @@ public class SecurityConfig {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(companyDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder); // ✅ Inject passwordEncoder từ AppConfig
+        authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
 }

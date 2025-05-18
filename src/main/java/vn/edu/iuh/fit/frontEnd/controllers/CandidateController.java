@@ -5,10 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.iuh.fit.backEnd.models.Candidate;
+import vn.edu.iuh.fit.backEnd.models.CandidateSkill;
 import vn.edu.iuh.fit.backEnd.services.CandidateService;
 import vn.edu.iuh.fit.backEnd.services.JobRecommendationService;
 import vn.edu.iuh.fit.backEnd.services.SkillService;
 
+import jakarta.servlet.http.HttpSession; // Thay vì javax.servlet.http.HttpSession
 import java.util.List;
 
 @Controller
@@ -27,7 +29,6 @@ public class CandidateController {
         model.addAttribute("candidates", candidates);
         return "candidate-list";
     }
-
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
@@ -59,6 +60,7 @@ public class CandidateController {
         candidateService.deleteCandidate(id);
         return "redirect:/candidates";
     }
+
     @GetMapping("/recommendations/{id}")
     public String showJobRecommendations(@PathVariable("id") long id, Model model) {
         model.addAttribute("jobs", jobRecommendationService.recommendJobsForCandidate(id));
@@ -69,5 +71,24 @@ public class CandidateController {
     public String showSkillRecommendations(@PathVariable("id") long id, Model model) {
         model.addAttribute("skills", skillService.recommendSkillsForCandidate(id));
         return "skill-recommendations";
+    }
+
+    @GetMapping("/{id}")
+    public String getCandidateDetails(@PathVariable("id") Long id, Model model) {
+        Candidate candidate = candidateService.getCandidateById(id);
+        List<CandidateSkill> skills = candidateService.getCandidateSkills(id);
+        model.addAttribute("candidate", candidate);
+        model.addAttribute("candidateSkills", skills);
+        return "candidate-details";
+    }
+
+    @GetMapping("/dashboard")
+    public String showDashboard(Model model, HttpSession session) {
+        Candidate candidate = (Candidate) session.getAttribute("loggedInCandidate");
+        if (candidate == null) {
+            return "redirect:/login/candidate"; // Chưa đăng nhập, chuyển về login
+        }
+        model.addAttribute("candidate", candidate);
+        return "candidate_dashboard"; // Trả về file candidate_dashboard.html
     }
 }

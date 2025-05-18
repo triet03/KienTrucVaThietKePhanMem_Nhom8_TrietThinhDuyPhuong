@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Setter
 @Getter
 @Entity
 @Table(name = "job_skill")
-public class JobSkill {
+public class JobSkill implements Serializable {
     // Getters & Setters
     @EmbeddedId
     private JobSkillId id;

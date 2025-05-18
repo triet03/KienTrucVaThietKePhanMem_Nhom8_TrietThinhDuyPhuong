@@ -1,5 +1,8 @@
 package vn.edu.iuh.fit.frontEnd.controllers;
 
+import io.github.resilience4j.ratelimiter.RateLimiter;
+import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,8 @@ import java.util.UUID;
 
 @Controller
 public class CompanyLoginController {
-
+    @Autowired
+    private RateLimiterRegistry rateLimiterRegistry; // ✅ Thêm dòng này
     @Autowired
     private CompanyRepository companyRepository;
 
@@ -33,11 +37,11 @@ public class CompanyLoginController {
     // ✅ 1. Hiển thị form đăng ký nhà tuyển dụng
     @GetMapping("/register/company")
     public String showCompanyRegisterForm(Model model) {
-        model.addAttribute("company", new Company()); // Truyền object `Company` vào model
+        model.addAttribute("company", new Company());
         return "company_register";
     }
 
-    // ✅ 2. Xử lý đăng ký nhà tuyển dụng
+    // ✅ 2. Xử lý đăng ký
     @PostMapping("/register/company")
     public String processCompanyRegister(@ModelAttribute("company") Company company, Model model) {
         if (companyRepository.findByEmail(company.getEmail()).isPresent()) {
@@ -45,14 +49,11 @@ public class CompanyLoginController {
             return "company_register";
         }
 
-        // Mã hóa mật khẩu
         company.setPassword(passwordEncoder.encode(company.getPassword()));
         company.setVerificationToken(UUID.randomUUID().toString());
         company.setEmailVerified(false);
-
         companyRepository.save(company);
 
-        // Gửi email xác thực
         try {
             sendVerificationEmail(company);
         } catch (MessagingException e) {
@@ -70,7 +71,7 @@ public class CompanyLoginController {
         String verifyUrl = "http://localhost:9998/verify/company?token=" + company.getVerificationToken();
         String body = "<p>Chào <b>" + company.getCompName() + "</b>,</p>"
                 + "<p>Vui lòng nhấn vào đường link dưới đây để xác thực tài khoản của bạn:</p>"
-                + "<p><a href='" + verifyUrl + "' style='color:blue;'>Xác thực tài khoản</a></p>";
+                + "<p><a href='" + verifyUrl + "'>Xác thực tài khoản</a></p>";
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -81,7 +82,7 @@ public class CompanyLoginController {
         mailSender.send(message);
     }
 
-    // ✅ 4. Xác thực email & tự động đăng nhập
+    // ✅ 4. Xác thực email & đăng nhập
     @GetMapping("/verify/company")
     public String verifyEmail(@RequestParam String token, Model model) {
         Optional<Company> companyOptional = companyRepository.findByVerificationToken(token);
@@ -89,16 +90,16 @@ public class CompanyLoginController {
         if (companyOptional.isPresent()) {
             Company company = companyOptional.get();
             company.setEmailVerified(true);
-            company.setVerificationToken(null); // Xóa token sau khi xác thực
+            company.setVerificationToken(null);
             companyRepository.save(company);
 
-            // Tự động đăng nhập sau khi xác thực
-            Authentication authentication = new UsernamePasswordAuthenticationToken(company, null, company.getAuthorities());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    company, null, company.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            return "redirect:/companyManage"; // Chuyển hướng đến dashboard
+            return "redirect:/companyManager"; // ✅ CHUẨN: giống CompanyManagerController
         } else {
-            model.addAttribute("message", "Mã xác thực không hợp lệ hoặc đã hết hạn!");
+            model.addAttribute("message", "❌ Mã xác thực không hợp lệ hoặc đã hết hạn!");
             model.addAttribute("success", false);
             return "verification_result";
         }
@@ -123,50 +124,49 @@ public class CompanyLoginController {
     public String processCompanyLogin(@RequestParam String email,
                                       @RequestParam String password,
                                       Model model) {
-        System.out.println("🔹 Đang xử lý đăng nhập với email: " + email);
 
-        Optional<Company> companyOptional = companyRepository.findByEmail(email);
+        RateLimiter limiter = rateLimiterRegistry.rateLimiter("loginCompanyLimiter");
 
-        if (companyOptional.isEmpty()) {
-            System.out.println("❌ Email không tồn tại trong database!");
-            model.addAttribute("error", "❌ Email không tồn tại!");
+        try {
+            // Logic được xử lý bên trong lambda, nhưng kết quả được gán ra ngoài
+            String[] resultHolder = new String[1];
+            RateLimiter.decorateRunnable(limiter, () -> {
+                Optional<Company> companyOptional = companyRepository.findByEmail(email);
+
+                if (companyOptional.isEmpty()) {
+                    resultHolder[0] = showError(model, "❌ Tài khoản không tồn tại!");
+                    return;
+                }
+
+                Company company = companyOptional.get();
+
+                if (!passwordEncoder.matches(password, company.getPassword())) {
+                    resultHolder[0] = showError(model, "❌ Sai mật khẩu!");
+                    return;
+                }
+
+                if (!company.isEmailVerified()) {
+                    resultHolder[0] = showError(model, "❌ Tài khoản chưa được xác thực email!");
+                    return;
+                }
+
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        company, null, company.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                resultHolder[0] = "redirect:/companyManager";
+            }).run();
+
+            return resultHolder[0];
+
+        } catch (RequestNotPermitted e) {
+            model.addAttribute("error", "⚠️ Đã vượt quá số lần đăng nhập cho phép. Vui lòng thử lại sau 1 phút.");
             return "company_login";
         }
-
-        Company company = companyOptional.get();
-        System.out.println("✅ Tìm thấy tài khoản: " + company.getEmail());
-
-        if (!company.isEmailVerified()) {
-            System.out.println("❌ Email chưa được xác thực!");
-            model.addAttribute("error", "❌ Email chưa xác thực. Vui lòng kiểm tra email.");
-            return "company_login";
-        }
-
-        System.out.println("🔹 Đang kiểm tra mật khẩu...");
-        if (!passwordEncoder.matches(password, company.getPassword())) {
-            System.out.println("❌ Mật khẩu không chính xác!");
-            model.addAttribute("error", "❌ Mật khẩu không chính xác!");
-            return "company_login";
-        }
-
-        System.out.println("✅ Đăng nhập thành công!");
-
-        // Tạo phiên đăng nhập
-        Authentication authentication = new UsernamePasswordAuthenticationToken(company, null, company.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return "redirect:/companyManage"; // Chuyển hướng đến dashboard
     }
 
-
-    // ✅ 7. Hiển thị trang quản lý nhà tuyển dụng
-    @GetMapping("/companyManage")
-    public String showCompanyManagement(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof Company) {
-            Company company = (Company) authentication.getPrincipal();
-            model.addAttribute("company", company);
-        }
-        return "QuanLyNhaTuyenDung";
+    private String showError(Model model, String errorMsg) {
+        model.addAttribute("error", errorMsg);
+        return "company_login";
     }
 }

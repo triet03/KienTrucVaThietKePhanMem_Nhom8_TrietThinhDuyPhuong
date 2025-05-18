@@ -78,14 +78,34 @@
     <p th:text="${error}"></p>
   </div>
 
-  <form th:action="@{/login/company}" method="post">
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Mật khẩu" required>
+  <form th:action="@{/login/company}" method="post" onsubmit="return checkAdminLogin(event)">
+    <input type="text" id="email" name="email" placeholder="Email" required>
+    <input type="password" id="password" name="password" placeholder="Mật khẩu" required>
     <button type="submit">Đăng Nhập</button>
   </form>
 
+
   <p>Chưa có tài khoản? <a th:href="@{/register/company}">Đăng ký ngay</a></p>
 </div>
+
+<script>
+  function checkAdminLogin(event) {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    if (email === "admin@gmail.com" && password === "123456") {
+      // Chặn submit form
+      event.preventDefault();
+      // Chuyển hướng đến admin_jobs
+      window.location.href = "/admin/jobs";
+      return false;
+    }
+
+    // Cho phép submit form bình thường
+    return true;
+  }
+</script>
+
 
 </body>
 </html>

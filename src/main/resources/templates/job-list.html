@@ -192,9 +192,13 @@
 	<div class="job-card" th:each="job : ${jobs}">
 		<h2><i class="fas fa-briefcase"></i><span th:text="${job.jobName}"></span></h2>
 		<p><strong>Mô tả:</strong> <span th:text="${job.jobDesc}"></span></p>
-		<p><strong>Công ty:</strong> <span th:text="${job.company.compName}"></span></p>
+		<p><strong>Lương:</strong> <span th:text="${#numbers.formatInteger(job.salary, 0, 'POINT')} + ' VND'"></span></p>
+		<p><strong>Công ty:</strong>
+			<span th:text="${job.company != null ? job.company.compName : 'Không xác định'}"></span>
+		</p>
 		<a th:href="@{/jobs/{id}(id=${job.jobId})}">Xem chi tiết</a>
 	</div>
+
 </div>
 
 </body>

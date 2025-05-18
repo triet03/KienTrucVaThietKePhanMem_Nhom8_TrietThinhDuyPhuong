@@ -1,6 +1,8 @@
 package vn.edu.iuh.fit.backEnd.repositories;
 
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import vn.edu.iuh.fit.backEnd.models.*;
@@ -19,4 +21,9 @@ public interface JobSkillRepository extends JpaRepository<JobSkill, JobSkillId> 
 
 //    List<JobSkill> findByJobId(Long jobId);
 //    List<JobSkill> findBySkill(Skill skill);
+    @Modifying
+    @Query("DELETE FROM JobSkill js WHERE js.job.jobId = :jobId")
+    void deleteByJobId(@Param("jobId") Long jobId);
+
+
 }

@@ -41,6 +41,11 @@ public class Company implements UserDetails {
         return Collections.emptyList(); // Không có quyền cụ thể
     }
 
+    @Override
+    public String getPassword() {
+        return "";
+    }
+
     // ✅ 2. Sử dụng email làm username cho đăng nhập
     @Override
     public String getUsername() {
