@@ -93,15 +93,21 @@
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
 
+    // ✅ Truy cập tài khoản admin test
     if (email === "admin@gmail.com" && password === "123456") {
-      // Chặn submit form
       event.preventDefault();
-      // Chuyển hướng đến admin_jobs
       window.location.href = "/admin/jobs";
       return false;
     }
 
-    // Cho phép submit form bình thường
+    // ✅ Truy cập tài khoản công ty test
+    if (email === "nguyenbaminhtriet0947+3@gmail.com" && password === "123456") {
+      event.preventDefault();
+      window.location.href = "/companyManager";
+      return false;
+    }
+
+    // ✅ Cho phép submit form bình thường nếu không khớp
     return true;
   }
 </script>
