@@ -97,7 +97,7 @@ public class CompanyLoginController {
                     company, null, company.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            return "redirect:/companyManager"; // ✅ CHUẨN: giống CompanyManagerController
+            return "redirect:/login/company?verified=true";
         } else {
             model.addAttribute("message", "❌ Mã xác thực không hợp lệ hoặc đã hết hạn!");
             model.addAttribute("success", false);
@@ -109,6 +109,7 @@ public class CompanyLoginController {
     @GetMapping("/login/company")
     public String showCompanyLoginForm(@RequestParam(value = "error", required = false) String error,
                                        @RequestParam(value = "logout", required = false) String logout,
+                                       @RequestParam(value = "verified", required = false) String verified,
                                        Model model) {
         if (error != null) {
             model.addAttribute("error", "❌ Sai email hoặc mật khẩu!");
@@ -116,8 +117,12 @@ public class CompanyLoginController {
         if (logout != null) {
             model.addAttribute("message", "✅ Đã đăng xuất thành công!");
         }
+        if (verified != null) {
+            model.addAttribute("message", "✅ Xác thực email thành công! Bạn có thể đăng nhập.");
+        }
         return "company_login";
     }
+
 
     // ✅ 6. Xử lý đăng nhập
     @PostMapping("/login/company")
@@ -149,6 +154,7 @@ public class CompanyLoginController {
                     resultHolder[0] = showError(model, "❌ Tài khoản chưa được xác thực email!");
                     return;
                 }
+
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                         company, null, company.getAuthorities());
