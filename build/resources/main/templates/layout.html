@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Application</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a th:href="@{/addresses}">Addresses</a></li>
+            <li><a th:href="@{/candidates}">Candidates</a></li>
+            <li><a th:href="@{/candidate-skills}">Candidate Skills</a></li>
+            <li><a th:href="@{/companies}">Companies</a></li>
+            <li><a th:href="@{/jobs}">Jobs</a></li>
+            <li><a th:href="@{/skills}">Skills</a></li>
+        </ul>
+    </nav>
+
+    <div th:replace="~{::body}"></div>
+</body>
+</html>

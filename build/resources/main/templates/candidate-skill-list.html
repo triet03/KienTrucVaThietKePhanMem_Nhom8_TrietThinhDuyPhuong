@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Candidate Skill List</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f6f9;
+			margin: 0;
+			padding: 0;
+		}
+
+		header {
+			background-color: #007bff;
+			color: white;
+			padding: 20px 0;
+		}
+
+		nav {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 20px;
+		}
+
+		nav a {
+			font-size: 24px;
+			font-weight: bold;
+			color: white;
+			text-decoration: none;
+		}
+
+		ul {
+			display: flex;
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		ul li {
+			margin: 0 15px;
+		}
+
+		ul li a {
+			font-size: 18px;
+			color: white;
+			text-decoration: none;
+		}
+
+		ul li a:hover {
+			color: #ffd700;
+		}
+
+		h2 {
+			text-align: center;
+			margin-top: 40px;
+			color: #333;
+		}
+
+		ul.skill-list {
+			list-style-type: none;
+			padding: 0;
+			margin: 0;
+			max-width: 1200px;
+			margin: 40px auto;
+		}
+
+		ul.skill-list li {
+			background-color: white;
+			padding: 15px;
+			margin: 10px 0;
+			border-radius: 8px;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+			font-size: 18px;
+			color: #333;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		a.add-skill-link {
+			display: block;
+			text-align: center;
+			margin-top: 30px;
+			text-decoration: none;
+			color: #28a745;
+			font-size: 18px;
+		}
+
+		a.add-skill-link:hover {
+			text-decoration: underline;
+		}
+	</style>
+</head>
+<body>
+<header>
+	<nav>
+		<a href="/home">Trang Chủ</a>
+		<ul>
+			<li><a href="/candidates">Ứng viên</a></li>
+			<li><a href="/companies">Công ty</a></li>
+			<li><a href="/jobs">Công việc</a></li>
+			<li><a href="/skills">Kỹ năng</a></li>
+		</ul>
+	</nav>
+</header>
+
+<h2>Candidate Skill List</h2>
+
+<ul class="skill-list">
+	<li th:each="candidateSkill : ${candidateSkills}">
+		<span th:text="${candidateSkill.candidate.fullName}">Candidate Name</span>
+		- <span th:text="${candidateSkill.skill.skillName}">Skill Name</span>
+		- <span th:text="${candidateSkill.skillLevel}">Skill Level</span>
+	</li>
+</ul>
+
+<a href="/candidate-skills/add" class="add-skill-link">Add Candidate Skill</a>
+
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Việc Làm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .user-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .job-card {
+            width: 30%;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .job-card h3 {
+            color: #007bff;
+        }
+
+        @media (max-width: 768px) {
+            .job-card {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>Trang Việc Làm</div>
+    <div class="user-name" th:text="${candidate.fullName}">Tên Ứng Viên</div>
+</header>
+
+<h1>Danh Sách Việc Làm</h1>
+
+<div class="grid">
+    <div class="job-card" th:each="job : ${jobs}">
+        <h3 th:text="${job.jobName}">Tên công việc</h3>
+        <p><strong>Mô tả:</strong> <span th:text="${job.jobDesc}">Mô tả công việc</span></p>
+        <p><strong>Công ty:</strong> <span th:text="${job.company.compName}">Tên công ty</span></p>
+    </div>
+</div>
+
+</body>
+</html>
