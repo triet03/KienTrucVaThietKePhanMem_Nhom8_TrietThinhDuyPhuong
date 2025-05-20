@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Chỉnh Sửa Ứng Viên</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f4;
+			margin: 0;
+			padding: 0;
+		}
+		header {
+			background-color: #007bff;
+			padding: 15px 0;
+			color: white;
+		}
+		nav {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 20px;
+		}
+		nav a {
+			color: white;
+			font-size: 18px;
+			text-decoration: none;
+		}
+		nav a:hover {
+			text-decoration: underline;
+		}
+		h1 {
+			text-align: center;
+			margin-top: 30px;
+			font-size: 36px;
+			color: #333;
+		}
+		form {
+			background-color: white;
+			max-width: 800px;
+			margin: 20px auto;
+			padding: 30px;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
+		label {
+			font-size: 18px;
+			margin-top: 10px;
+			display: block;
+			color: #333;
+		}
+		input[type="text"], input[type="email"], input[type="date"] {
+			width: 100%;
+			padding: 12px;
+			margin-top: 5px;
+			margin-bottom: 15px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			font-size: 16px;
+		}
+		button {
+			background-color: #28a745;
+			color: white;
+			padding: 12px 20px;
+			font-size: 18px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			width: 100%;
+		}
+		button:hover {
+			background-color: #218838;
+		}
+	</style>
+</head>
+<body>
+
+<header>
+	<nav>
+		<a href="/home">Trang Chủ</a>
+		<ul style="display: flex; list-style-type: none; margin: 0; padding: 0;">
+			<li style="margin: 0 15px;"><a href="/candidates">Ứng viên</a></li>
+			<li style="margin: 0 15px;"><a href="/companies">Công ty</a></li>
+			<li style="margin: 0 15px;"><a href="/jobs">Công việc</a></li>
+			<li style="margin: 0 15px;"><a href="/skills">Kỹ năng</a></li>
+		</ul>
+	</nav>
+</header>
+
+<h1>Chỉnh Sửa Ứng Viên</h1>
+
+<form th:action="@{/candidates/update/{id}(id=${candidate.canId})}" th:object="${candidate}" method="post">
+	<label for="fullName">Họ và tên:</label>
+	<input type="text" id="fullName" th:field="*{fullName}" required>
+
+	<label for="dob">Ngày sinh:</label>
+	<input type="date" id="dob" th:field="*{dob}" required>
+
+	<label for="address">Địa chỉ:</label>
+	<input type="text" id="address" th:field="*{address.street}" required>
+	<input type="text" id="city" th:field="*{address.city}" required>
+	<input type="text" id="zipcode" th:field="*{address.zipcode}" required>
+	<input type="text" id="country" th:field="*{address.country}" required>
+
+	<label for="phone">Số điện thoại:</label>
+	<input type="text" id="phone" th:field="*{phone}" required>
+
+	<label for="email">Email:</label>
+	<input type="email" id="email" th:field="*{email}" required>
+
+	<button type="submit">Lưu</button>
+</form>
+
+</body>
+</html>

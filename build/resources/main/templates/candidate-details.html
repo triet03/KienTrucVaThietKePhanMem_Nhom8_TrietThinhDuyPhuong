@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi Tiết Ứng Viên</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
+  <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 15px 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    nav {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    nav a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: bold;
+        transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+    nav a:hover {
+        color: #f8d210;
+        transform: scale(1.05);
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #007bff;
+        text-align: center;
+        font-size: 32px;
+        margin-bottom: 20px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .info {
+        margin-bottom: 30px;
+    }
+
+    .info p {
+        font-size: 18px;
+        margin: 8px 0;
+    }
+
+    .info p strong {
+        color: #007bff;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    .skills {
+        margin-top: 30px;
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .skills h2 {
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+
+    .skills ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .skills li {
+        font-size: 16px;
+        color: #666;
+        margin: 8px 0;
+        position: relative;
+        padding-left: 25px;
+    }
+
+    .skills li:before {
+        content: "\f058";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        color: #28a745;
+        position: absolute;
+        left: 0;
+        top: 2px;
+    }
+
+    a.back-link {
+        display: inline-block;
+        margin-top: 30px;
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    a.back-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Style for "Tuyển dụng" button and form */
+    .hire-btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background-color: #28a745;
+        color: #fff;
+        text-align: center;
+        border-radius: 25px;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    .hire-btn:hover {
+        background-color: #218838;
+        transform: translateY(-3px);
+    }
+
+    .recruitment-form {
+        display: none;
+        margin-top: 30px;
+        padding: 25px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .recruitment-form h2 {
+        font-size: 24px;
+        color: #007bff;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .recruitment-form label {
+        font-weight: bold;
+        color: #333;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .recruitment-form input, .recruitment-form textarea {
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+
+    .recruitment-form input:focus, .recruitment-form textarea:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    .recruitment-form button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .recruitment-form button:hover {
+        background-color: #0056b3;
+        transform: translateY(-3px);
+    }
+  </style>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="/homeCandidate">Trang Chủ</a>
+  </nav>
+</header>
+<div class="container" th:object="${candidate}">
+  <h1>Chi Tiết Ứng Viên</h1>
+
+  <div class="info">
+    <p><strong>Họ tên:</strong> <span th:text="*{fullName}"></span></p>
+    <p><strong>Email:</strong> <span th:text="*{email}"></span></p>
+    <p><strong>Điện thoại:</strong> <span th:text="*{phone}"></span></p>
+    <p><strong>Ngày sinh:</strong> <span th:text="${#dates.format(candidate.dob, 'yyyy-MM-dd')}"></span></p>
+    <p><strong>Địa chỉ:</strong>
+      <span th:text="*{address != null ? address.city : 'Chưa cập nhật'}"></span>
+    </p>
+  </div>
+
+  <div class="skills">
+    <h2>Kỹ năng</h2>
+    <ul>
+      <li th:each="skill : ${skills}" th:text="${skill.skillName}"></li>
+      <li th:if="${#lists.isEmpty(skills)}">Chưa cập nhật kỹ năng.</li>
+    </ul>
+  </div>
+
+  <!-- Nút Tuyển dụng để mở form -->
+  <button class="hire-btn" onclick="showRecruitmentForm()">Tuyển dụng ứng viên</button>
+
+  <!-- Form điền thư tuyển dụng -->
+  <div class="recruitment-form" id="recruitmentForm">
+    <h2>Điền Thông Tin Thư Tuyển Dụng</h2>
+    <form action="#" method="post">
+      <label for="companyName">Tên Công Ty:</label>
+      <input type="text" id="companyName" name="companyName" required>
+
+      <label for="jobTitle">Chức Vụ:</label>
+      <input type="text" id="jobTitle" name="jobTitle" required>
+
+      <label for="offerMessage">Thư Tuyển Dụng:</label>
+      <textarea id="offerMessage" name="offerMessage" rows="4" required></textarea>
+
+      <button type="submit">Gửi Thư Tuyển Dụng</button>
+    </form>
+  </div>
+
+  <a class="back-link" href="/candidates">← Quay lại danh sách</a>
+</div>
+
+<script>
+  function showRecruitmentForm() {
+      document.getElementById("recruitmentForm").style.display = "block";
+  }
+</script>
+</body>
+</html>

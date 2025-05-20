@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Candidate Recommendations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav a {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        ul {
+            display: flex;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        ul li {
+            margin: 0 15px;
+        }
+
+        ul li a {
+            font-size: 18px;
+            color: white;
+            text-decoration: none;
+        }
+
+        ul li a:hover {
+            color: #ffd700;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 40px;
+            color: #333;
+        }
+
+        ul.candidate-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul.candidate-list li {
+            background-color: white;
+            padding: 20px;
+            margin: 10px auto;
+            width: 80%;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        ul.candidate-list li span {
+            font-size: 18px;
+            color: #333;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        a.back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            text-decoration: none;
+            color: #007bff;
+            font-size: 18px;
+        }
+
+        a.back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <a href="/home">Trang Chủ</a>
+        <ul>
+            <li><a href="/candidates">Ứng viên</a></li>
+            <li><a href="/companies">Công ty</a></li>
+            <li><a href="/jobs">Công việc</a></li>
+            <li><a href="/skills">Kỹ năng</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h2>Candidate Recommendations</h2>
+
+<ul class="candidate-list">
+    <li th:each="candidate : ${candidates}">
+        <div>
+            <span th:text="${candidate.fullName}">Candidate Name</span><br>
+            <span th:text="${candidate.email}">Candidate Email</span><br>
+            <span th:text="${candidate.phone}">Candidate Phone</span>
+        </div>
+        <button th:onclick="'sendEmail(' + ${candidate.canId} + ', ' + ${jobId} + ')'">Send Email</button>
+    </li>
+</ul>
+
+<a href="/jobs" class="back-link">Back to Job List</a>
+
+<script>
+    function sendEmail(candidateId, jobId) {
+        fetch('/jobs/send-email/' + candidateId + '?jobId=' + jobId, {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                alert('Email sent successfully!');
+            } else {
+                alert('Failed to send email.');
+            }
+        });
+    }
+</script>
+</body>
+</html>
