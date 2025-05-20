@@ -10,45 +10,58 @@ import java.util.Optional;
 
 @Service
 public class CompanyService {
-	 @Autowired
-	    private CompanyRepository companyRepository;
+	@Autowired
+	private CompanyRepository companyRepository;
 
+	// Gửi email (nếu cần mở rộng)
 	public static void sendEmail(String email, String subject, String text) {
+		// Email logic here (hiện đang để trống)
 	}
 
 	public List<Company> getAllCompanies() {
-	        return companyRepository.findAll();
-	    }
+		return companyRepository.findAll();
+	}
 
-	    public Company getCompanyById(Long id) {
-	        Optional<Company> company = companyRepository.findById(id);
-	        if (company.isPresent()) {
-	            return company.get();
-	        } else {
+	public Company getCompanyById(Long id) {
+		return companyRepository.findById(id).orElse(null);
+	}
 
-	            return null;  // Hoặc bạn có thể tạo một ngoại lệ tùy chỉnh nếu cần
-	        }
-	    }
+	public Company createCompany(Company company) {
+		return companyRepository.save(company);
+	}
+
+	public Company updateCompany(Long id, Company companyDetails) {
+		Company company = getCompanyById(id);
+		if (company != null) {
+			company.setCompName(companyDetails.getCompName());
+			company.setAbout(companyDetails.getAbout());
+			company.setEmail(companyDetails.getEmail());
+			company.setPhone(companyDetails.getPhone());
+			company.setWebUrl(companyDetails.getWebUrl());
+			company.setAddress(companyDetails.getAddress());
+			return companyRepository.save(company);
+		}
+		return null;
+	}
+
+	public void deleteCompany(Long id) {
+		Company company = getCompanyById(id);
+		if (company != null) {
+			companyRepository.delete(company);
+		}
+	}
+
+	// 🔥 Thêm cho đăng ký / đăng nhập
+	public Company findByEmail(String email) {
+		return companyRepository.findByEmail(email).orElse(null);
+	}
 
 
-	    public Company createCompany(Company company) {
-	        return companyRepository.save(company);
-	    }
+	public boolean existsByEmail(String email) {
+		return companyRepository.findByEmail(email).isPresent();
+	}
 
-	    public Company updateCompany(Long id, Company companyDetails) {
-	        Company company = getCompanyById(id);
-	        company.setCompName(companyDetails.getCompName());
-	        company.setAbout(companyDetails.getAbout());
-	        company.setEmail(companyDetails.getEmail());
-	        company.setPhone(companyDetails.getPhone());
-	        company.setWebUrl(companyDetails.getWebUrl());
-	        company.setAddress(companyDetails.getAddress());
-	        return companyRepository.save(company);
-	    }
-
-	    public void deleteCompany(Long id) {
-	        Company company = getCompanyById(id);
-	        companyRepository.delete(company);
-	    }
+	public void save(Company company) {
+		companyRepository.save(company);
+	}
 }
-

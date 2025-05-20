@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
-                        .loginPage("/login/company")
+//                        .loginPage("/login/company")
                         .defaultSuccessUrl("/companyManage", true)
                         .permitAll()
                 )

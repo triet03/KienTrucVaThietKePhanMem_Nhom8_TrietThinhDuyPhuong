@@ -63,18 +63,20 @@
 </head>
 <body>
 
-<header>
-  <a href="/homeCompany">Trang Chủ</a>
-</header>
+<!--<header>-->
+<!--  <a href="/homeCompany">Trang Chủ</a>-->
+<!--</header>-->
 
 <div class="container">
   <h2>Đăng Nhập Nhà Tuyển Dụng</h2>
 
-  <!-- Hiển thị thông báo nếu có -->
-  <div th:if="${message}" style="color: green; font-weight: bold;">
-    <p th:text="${message}"></p>
+  <!-- THÔNG BÁO THÀNH CÔNG -->
+  <div th:if="${success}" style="color: green; font-weight: bold; margin-bottom: 10px;">
+    <p th:text="${success}"></p>
   </div>
-  <div th:if="${error}" style="color: red; font-weight: bold;">
+
+  <!-- THÔNG BÁO LỖI -->
+  <div th:if="${error}" style="color: red; font-weight: bold; margin-bottom: 10px;">
     <p th:text="${error}"></p>
   </div>
 

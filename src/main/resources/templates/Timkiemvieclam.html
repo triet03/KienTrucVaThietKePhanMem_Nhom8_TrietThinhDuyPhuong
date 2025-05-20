@@ -2,19 +2,209 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Tìm việc của bạn</title>
+    <title>Hồ Sơ Của Bạn</title>
     <style>
+        /* Header */
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 18px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
 
+        .home-button {
+            background-color: #007bff; /* Màu nền giống màu header */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: white; /* Đổi màu nền thành trắng */
+            padding-top: 20px;
+            color: #4e73df;
+            height: 100vh;
+            position: fixed;
+            padding-left: 10px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Thêm bóng cho sidebar */
+            top: 60px; /* Đẩy sidebar xuống dưới header */
+        }
+
+        .sidebar a {
+            color: #4e73df;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+            border-left: 5px solid transparent;
+            position: relative;
+        }
+
+        .sidebar a:hover {
+            background-color: #f1f1f1;
+            border-left: 5px solid #007bff;
+        }
+
+        .sidebar .submenu a {
+            font-size: 14px;
+            padding-left: 30px;
+        }
+
+        .submenu {
+            display: none;
+        }
+
+        /* Accordion Effect */
+        .submenu.active {
+            display: block;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            flex-grow: 1;
+            margin-top: 80px; /* Đẩy nội dung chính xuống dưới header */
+        }
+
+        .main-content h2 {
+            color: #007bff;
+        }
+
+
+        .skills-section h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .skills li {
+            background-color: #e9ecef;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 6px;
+            display: block;
+        }
     </style>
 </head>
 <body>
 
 <!-- Header -->
 <header>
-
+    <button class="home-button" onclick="goHome()">Trang Chủ</button>
 </header>
-<script>
 
+<!-- Sidebar -->
+<div class="sidebar">
+    <a href="javascript:void(0);" onclick="toggleSubMenu('submenu1')">Quản lý tài khoản</a>
+    <div id="submenu1" class="submenu">
+        <a href="#">Tài khoản của bạn</a>
+    </div>
+
+    <a href="javascript:void(0);" onclick="toggleSubMenu('submenu2')">Quản lý hồ sơ</a>
+    <div id="submenu2" class="submenu">
+        <a href="/hoso-cua-ban">Hồ sơ của bạn</a>
+        <a href="/hoso-candidate">Cập nhật thông tin</a>
+    </div>
+
+    <a href="javascript:void(0);" onclick="toggleSubMenu('submenu3')">Quản lý việc làm</a>
+    <div id="submenu3" class="submenu">
+        <a href="#">Việc làm đã ứng tuyển</a>
+        <a href="#">Việc làm đã lưu</a>
+        <a href="#">Việc làm chờ ứng tuyển</a>
+        <a href="#">Thông báo việc làm</a>
+        <a href="/Timkiemvieclam">Tìm kiếm việc làm</a>
+
+    </div>
+
+    <a href="javascript:void(0);" onclick="toggleSubMenu('submenu4')">Nhà tuyển dụng bạn quan tâm</a>
+    <div id="submenu4" class="submenu">
+        <a href="#">Nhà tuyển dụng xem hồ sơ bạn</a>
+        <a href="#">Nhà tuyển dụng đang theo dõi</a>
+    </div>
+
+    <a href="javascript:void(0);" onclick="toggleSubMenu('submenu5')">Hỗ trợ và thông báo</a>
+    <div id="submenu5" class="submenu">
+        <a href="#">Việc làm 24h thông báo</a>
+        <a href="#">Hướng dẫn sử dụng</a>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <h2 style="margin-bottom: 20px;">Tìm kiếm việc làm</h2>
+
+    <div style="display: flex; gap: 15px; flex-wrap: wrap; background-color: #4727a3; padding: 20px; border-radius: 12px;">
+        <!-- Ô tìm kiếm -->
+        <div style="flex: 1; min-width: 250px; display: flex; align-items: center; background: white; border-radius: 6px; padding: 10px;">
+            <i class="fas fa-search" style="color: #aaa; margin-right: 10px;"></i>
+            <input type="text" placeholder="Tìm kiếm cơ hội việc làm" style="border: none; outline: none; flex: 1; font-size: 16px;" />
+        </div>
+
+        <!-- Lọc theo lương -->
+        <select style="min-width: 180px; padding: 10px; border-radius: 6px; border: none;" required>
+            <option value="" disabled selected hidden>Lọc theo lương</option>
+            <option value="under5">Dưới 5 triệu</option>
+            <option value="5to10">5 - 10 triệu</option>
+            <option value="above10">Trên 10 triệu</option>
+        </select>
+
+        <!-- Lọc theo địa chỉ -->
+        <select style="min-width: 180px; padding: 10px; border-radius: 6px; border: none;">
+            <option>Lọc theo địa chỉ</option>
+            <option>Hồ Chí Minh</option>
+            <option>Hà Nội</option>
+            <option>Đà Nẵng</option>
+        </select>
+        
+        <!-- Nút tìm kiếm -->
+        <button style="background-color: #007bff; color: white; padding: 10px 25px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">
+            Tìm kiếm
+        </button>
+    </div>
+    <h3 style="margin-top: 40px; color: #007bff;">Kết quả tìm kiếm:</h3>
+
+    <div th:if="${jobs != null and !jobs.isEmpty()}">
+        <div th:each="job : ${jobs}" style="background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px;">
+            <h4 th:text="${job.jobName}" style="color: #333; margin-bottom: 10px;">Tên công việc</h4>
+            <p><strong>Mô tả:</strong> <span th:text="${job.jobDesc}">Mô tả công việc</span></p>
+            <p><strong>Lương:</strong> <span th:text="${job.salary} + ' triệu'">Lương</span></p>
+            <p><strong>Địa chỉ:</strong> <span th:text="${job.company.address.street + ', ' + job.company.address.city}">Địa chỉ</span></p>
+        </div>
+    </div>
+
+    <!-- Nếu không có kết quả -->
+    <div th:if="${jobs == null or jobs.isEmpty()}" style="margin-top: 20px; color: gray;">
+        Không tìm thấy công việc nào phù hợp.
+    </div>
+    <a href="/tranghosonguoidung" class="back-btn">← Quay lại Dashboard</a>
+</div>
+
+<script>
+    function toggleSubMenu(submenuId) {
+        var submenu = document.getElementById(submenuId);
+        if (submenu.classList.contains('active')) {
+            submenu.classList.remove('active');
+        } else {
+            submenu.classList.add('active');
+        }
+    }
+
+    function goHome() {
+        window.location.href = "/tranghosonguoidung"; // Điều hướng về dashboard khi nhấn "Trang Chủ"
+    }
 </script>
 
 </body>

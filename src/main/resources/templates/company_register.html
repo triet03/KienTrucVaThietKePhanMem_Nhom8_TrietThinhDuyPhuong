@@ -75,24 +75,48 @@
 <div class="container">
   <h2>Đăng Ký Nhà Tuyển Dụng</h2>
 
-  <!-- Hiển thị lỗi nếu có -->
-  <div th:if="${error}" class="error">
-    <p th:text="${error}"></p>
-  </div>
+  <!-- Hiển thị thông báo -->
+  <div th:if="${error}" style="color: red; font-weight: bold;" th:text="${error}"></div>
+  <div th:if="${success}" style="color: green; font-weight: bold;" th:text="${success}"></div>
 
-  <form th:action="@{/register/company}" th:object="${company}" method="post">
-    <input type="text" th:field="*{compName}" placeholder="Tên công ty" required>
-    <input type="email" th:field="*{email}" placeholder="Email" required>
-    <input type="password" th:field="*{password}" placeholder="Mật khẩu" required>
-    <input type="text" th:field="*{phone}" placeholder="Số điện thoại" required>
-    <input type="text" th:field="*{webUrl}" placeholder="Website">
-    <textarea th:field="*{about}" placeholder="Mô tả công ty" rows="4"></textarea>
+  <form th:action="@{/register/company/confirm}" method="post">
+    <input type="text" name="compName" placeholder="Tên công ty" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="password" name="password" placeholder="Mật khẩu" required />
+    <input type="text" name="phone" placeholder="Số điện thoại" required />
+    <input type="text" name="webUrl" placeholder="Website" />
+    <textarea name="about" placeholder="Mô tả công ty"></textarea>
 
-    <button type="submit">Đăng Ký</button>
+    <!-- Mã xác thực -->
+    <div style="display: flex; gap: 10px; margin-top: 10px;">
+      <input type="text" name="verifyCode" placeholder="Mã xác thực" required style="flex: 2; padding: 10px; border-radius: 6px; border: 1px solid #ccc;" />
+      <button type="button" onclick="sendCode()" style="flex: 1; background-color: #007bff; color: white; border: none; border-radius: 6px; padding: 10px;">
+        Gửi mã
+      </button>
+    </div>
+
+    <button type="submit">Đăng ký</button>
   </form>
+
 
   <p>Đã có tài khoản? <a th:href="@{/login/company}">Đăng nhập</a></p>
 </div>
-
+<script>
+  function sendCode() {
+    const email = document.querySelector('input[name="email"]').value;
+    fetch("/register/company/send-code", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: "email=" + encodeURIComponent(email)
+    })
+            .then(res => res.text())
+            .then(msg => {
+              if (msg === "sent") alert("✅ Mã xác thực đã được gửi.");
+              else if (msg === "exists") alert("❌ Email đã tồn tại.");
+              else if (msg === "invalid") alert("❌ Email không hợp lệ.");
+              else alert("❌ Gửi mã thất bại.");
+            });
+  }
+</script>
 </body>
 </html>
