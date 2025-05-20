@@ -13,7 +13,6 @@
       text-align: center;
     }
 
-    /* Header */
     header {
       background-color: #007bff;
       color: #fff;
@@ -60,6 +59,25 @@
     button:hover {
       background-color: #0056b3;
     }
+
+    .verify-code-container {
+      display: flex;
+      gap: 10px;
+    }
+
+    .verify-code-container input {
+      flex: 2;
+    }
+
+    .verify-code-container button {
+      flex: 1;
+      margin: 0;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -70,14 +88,55 @@
 
 <div class="container">
   <h2>Đăng Ký Người Tìm Việc</h2>
-  <form th:action="@{/register/candidate}" method="post">
+
+  <!-- ✅ Sửa action ở đây -->
+  <form th:action="@{/register/confirm}" method="post">
     <input type="text" name="fullName" placeholder="Họ và tên" required>
-    <input type="email" name="email" placeholder="Email" required>
+    <input type="email" id="email" name="email" placeholder="Email" required>
     <input type="password" name="password" placeholder="Mật khẩu" required>
+
+    <div class="verify-code-container">
+      <input type="text" id="verifyCode" name="verifyCode" placeholder="Mã xác thực" required>
+      <button type="button" onclick="sendCode()">Gửi mã</button>
+    </div>
+
+    <div id="status" class="error" th:text="${error}"></div>
+
     <button type="submit">Đăng Ký</button>
   </form>
+
   <p>Đã có tài khoản? <a th:href="@{/login/candidate}">Đăng nhập</a></p>
 </div>
+
+<script>
+  function sendCode() {
+    const email = document.getElementById("email").value;
+    const status = document.getElementById("status");
+
+    if (!email) {
+      status.textContent = "Vui lòng nhập email trước khi gửi mã.";
+      return;
+    }
+
+    fetch("/register/send-code", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: "email=" + encodeURIComponent(email)
+    })
+            .then(response => response.text())
+            .then(text => {
+              if (text === "exists") {
+                status.textContent = "Email đã tồn tại trong hệ thống.";
+              } else if (text === "invalid") {
+                status.textContent = "Email không đúng định dạng.";
+              } else if (text === "sent") {
+                status.textContent = "Mã xác thực đã được gửi đến email của bạn.";
+              } else {
+                status.textContent = "Đã có lỗi xảy ra. Vui lòng thử lại.";
+              }
+            });
+  }
+</script>
 
 </body>
 </html>

@@ -27,25 +27,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf().disable() // ⚠️ Tắt CSRF nếu dùng fetch/ajax, bật lại nếu dùng form submit chuẩn
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/", "/register/company", "/register/**",
-                                "/verify/company", "/verify", "/login/**",
+                                "/", "/companyManager", "/companyManager/**", "/{id}",
+                                "/verify", "/verify/company",
+                                "/register/**", "/register/send-code",     // ✅ Cho phép gửi mã không cần đăng nhập
+                                "/login/**",
                                 "/homeCompany", "/homeCandidate",
                                 "/jobs", "/jobs/**",
-                                "/candidates/{id}", "/{id}",
-                                "/css/**", "/js/**", "/images/**",
-                                "/companyManager/**", // Cho phép tất cả endpoint /companyManager/**
-                                "/admin/jobs", "/admin/jobs/approve/{id}", "/admin/jobs/reject/{id}",
-                                "/ungVien/**", "/update", "/delete/{id}", "/edit/{id}",
-                                "/apply", "/uploads/**", "/ungVien/nop-ho-so",
-                                "/job-list" // Thêm /job-list để đảm bảo redirect hoạt động
+                                "/css/**", "/js/**"
                         ).permitAll()
+                        .requestMatchers("/company_mangement").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
-                        .loginPage("/login/company")
-                        .defaultSuccessUrl("/companyManager", true)
+//                        .loginPage("/login/company")
+                        .defaultSuccessUrl("/companyManage", true)
                         .permitAll()
                 )
                 .logout(logout -> logout

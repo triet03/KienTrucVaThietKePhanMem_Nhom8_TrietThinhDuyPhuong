@@ -1,154 +1,145 @@
-package vn.edu.iuh.fit.frontEnd.controllers;
+   package vn.edu.iuh.fit.frontEnd.controllers;
 
-import jakarta.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import vn.edu.iuh.fit.backEnd.models.Candidate;
-import vn.edu.iuh.fit.backEnd.services.CandidateService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+    import jakarta.servlet.http.HttpSession;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.stereotype.Controller;
+    import org.springframework.ui.Model;
+    import org.springframework.web.bind.annotation.*;
+
+    import vn.edu.iuh.fit.backEnd.models.Candidate;
+    import vn.edu.iuh.fit.backEnd.models.CandidateSkill;
+    import vn.edu.iuh.fit.backEnd.repositories.CandidateSkillRepository;
+    import vn.edu.iuh.fit.backEnd.services.CandidateService;
+    import vn.edu.iuh.fit.backEnd.services.JobService;
+
+    import java.util.List;
 
 @Controller
-public class CandidateLoginController {
+    public class CandidateLoginController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CandidateLoginController.class);
+        @Autowired
+        private CandidateService candidateService;
+        @Autowired
+        private CandidateSkillRepository candidateSkillRepository;
+        @Autowired
+        private JobService jobService;
 
-    @Autowired
-    private CandidateService candidateService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @GetMapping("/register")
-    public String showRegisterForm(Model model) {
-        model.addAttribute("error", null);
-        return "candidate_register";
-    }
-
-    @PostMapping("/register/candidate")
-    public String processCandidateRegistration(
-            @RequestParam String fullName,
-            @RequestParam String email,
-            @RequestParam String password,
-            Model model,
-            HttpSession session) {
-        try {
-            Candidate existingCandidate = candidateService.findByEmail(email);
-            if (existingCandidate != null) {
-                model.addAttribute("error", "Email đã được sử dụng!");
-                return "candidate_register";
-            }
-
-            session.setAttribute("pendingCandidate", new Candidate());
-            session.setAttribute("pendingFullName", fullName);
-            session.setAttribute("pendingEmail", email);
-            session.setAttribute("pendingPassword", passwordEncoder.encode(password));
-
-            candidateService.sendAndSaveVerificationCode(email);
-
-            return "redirect:/verify-code";
-        } catch (Exception e) {
-            logger.error("Error during registration for email: {}", email, e);
-            model.addAttribute("error", "Đã có lỗi xảy ra, vui lòng thử lại!");
-            return "candidate_register";
-        }
-    }
-
-    @GetMapping("/verify-code")
-    public String showVerifyCodeForm(Model model) {
-        model.addAttribute("error", null);
-        return "verify_code";
-    }
-
-    @PostMapping("/verify-code")
-    public String processVerifyCode(
-            @RequestParam String code,
-            Model model,
-            HttpSession session) {
-        String email = (String) session.getAttribute("pendingEmail");
-        if (email == null) {
-            model.addAttribute("error", "Phiên đăng ký đã hết hạn, vui lòng đăng ký lại!");
-            return "verify_code";
+        // -------------------- HIỂN THỊ FORM ĐĂNG KÝ --------------------
+        @GetMapping("/register")
+        public String showRegisterForm() {
+            return "candidate_register"; // Trả về file candidate_register.html
         }
 
-        try {
-            boolean isValidCode = candidateService.verifyCode(email, code);
-            if (isValidCode) {
-                Candidate candidate = (Candidate) session.getAttribute("pendingCandidate");
-                candidate.setFullName((String) session.getAttribute("pendingFullName"));
-                candidate.setEmail(email);
-                candidate.setPassword((String) session.getAttribute("pendingPassword"));
-                candidateService.createCandidate(candidate);
+        // -------------------- XỬ LÝ ĐĂNG KÝ --------------------
+        @PostMapping("/register/candidate")
+        public String processCandidateRegistration(@RequestParam String fullName,
+                                                   @RequestParam String email,
+                                                   @RequestParam String password) {
+            Candidate candidate = new Candidate();
+            candidate.setFullName(fullName);
+            candidate.setEmail(email);
+            candidate.setPassword(password); // Có thể mã hóa bằng BCrypt
 
-                session.removeAttribute("pendingCandidate");
-                session.removeAttribute("pendingFullName");
-                session.removeAttribute("pendingEmail");
-                session.removeAttribute("pendingPassword");
+            candidateService.saveCandidate(candidate);
+            System.out.println("✅ Người tìm việc đăng ký: " + fullName + " - " + email);
 
-                return "redirect:/login/candidate";
-            } else {
-                model.addAttribute("error", "Mã xác thực không đúng hoặc đã hết hạn!");
-                return "verify_code";
-            }
-        } catch (Exception e) {
-            logger.error("Error during code verification for email: {}", email, e);
-            model.addAttribute("error", "Đã có lỗi xảy ra, vui lòng thử lại!");
-            return "verify_code";
-        }
-    }
-
-    @GetMapping("/resend-code")
-    public String resendVerificationCode(Model model, HttpSession session) {
-        String email = (String) session.getAttribute("pendingEmail");
-        if (email == null) {
-            model.addAttribute("error", "Phiên đăng ký đã hết hạn, vui lòng đăng ký lại!");
-            return "candidate_register";
+            return "redirect:/login/candidate";
         }
 
-        try {
-            candidateService.deleteVerificationCodeByEmail(email);
-            candidateService.sendAndSaveVerificationCode(email);
-            model.addAttribute("message", "Mã xác thực mới đã được gửi đến email của bạn!");
-            return "verify_code";
-        } catch (Exception e) {
-            logger.error("Error during resend code for email: {}", email, e);
-            model.addAttribute("error", "Đã có lỗi xảy ra khi gửi lại mã, vui lòng thử lại!");
-            return "verify_code";
+        // -------------------- HIỂN THỊ FORM ĐĂNG NHẬP --------------------
+        @GetMapping("/login/candidate")
+        public String showLoginForm() {
+            return "candidate_login"; // Trả về file candidate_login.html
         }
-    }
 
-    @GetMapping("/login/candidate")
-    public String showLoginForm(Model model) {
-        model.addAttribute("error", null);
-        return "candidate_login";
-    }
-
-    @PostMapping("/login/candidate")
-    public String processCandidateLogin(
-            @RequestParam String email,
-            @RequestParam String password,
-            Model model,
-            HttpSession session) {
-        try {
+        // -------------------- XỬ LÝ ĐĂNG NHẬP --------------------
+        @PostMapping("/login/candidate")
+        public String processCandidateLogin(@RequestParam String email,
+                                            @RequestParam String password,
+                                            HttpSession session,
+                                            Model model) {
             Candidate candidate = candidateService.findByEmail(email);
-            if (candidate != null && passwordEncoder.matches(password, candidate.getPassword())) {
+
+            if (candidate != null && candidate.getPassword().equals(password)) {
                 session.setAttribute("loggedInCandidate", candidate);
-
-                // KHÔNG sử dụng AuthenticationManager ở đây
-                // Vì chúng ta không cấu hình UserDetailsService riêng
-
-                return "redirect:/candidates/dashboard";
-            } else {
-                model.addAttribute("error", "Email hoặc mật khẩu không đúng!");
-                return "candidate_login";
+                System.out.println("✅ Đăng nhập thành công: " + email);
+                return "redirect:/dashboardCandidate";
             }
-        } catch (Exception e) {
-            logger.error("Error during login for email: {}", email, e);
-            model.addAttribute("error", "Đã có lỗi xảy ra, vui lòng thử lại!");
+
+            model.addAttribute("error", "Email hoặc mật khẩu không đúng.");
             return "candidate_login";
         }
+
+        // -------------------- HIỂN THỊ DASHBOARD ỨNG VIÊN --------------------
+        @GetMapping("/dashboardCandidate")
+        public String showDashboardCandidate(HttpSession session, Model model) {
+            Candidate candidate = (Candidate) session.getAttribute("loggedInCandidate");
+            if (candidate == null) {
+                return "redirect:/login/candidate";
+            }
+
+            model.addAttribute("loggedInCandidate", candidate);
+          // model.addAttribute("jobs", jobService.findAll());
+
+            return "dashboard-candidate"; // Trả về file dashboard-candidate.html
+        }
+
+
+        @GetMapping("/tranghosonguoidung")
+        public String showProfile(HttpSession session, Model model) {
+            Candidate candidate = (Candidate) session.getAttribute("loggedInCandidate");
+            if (candidate == null) return "redirect:/login/candidate";
+
+            model.addAttribute("candidate", candidate);
+            return "tranghosonguoidung" ; // 👉 Trả về file bạn vừa gửi
+        }
+
+        // -------------------- HIỂN THỊ FORM CẬP NHẬT HỒ SƠ --------------------
+        @GetMapping("/hoso-candidate")
+        public String showUpdateCandidateForm(HttpSession session, Model model) {
+            Long candidateId = (Long) session.getAttribute("loggedInCandidateId");
+            if (candidateId == null) {
+                return "redirect:/login/candidate";
+            }
+            return "update-candidate";
+        }
+
+        //--------Hien thi ho so cua ban--------///
+        @GetMapping("/hoso-cua-ban")
+        public String showHoSoCuaBan(HttpSession session, Model model) {
+            // Lấy candidate từ session
+            Candidate candidate = (Candidate) session.getAttribute("loggedInCandidate");
+            if (candidate == null) {
+                System.out.println("ERROR: loggedInCandidate is null in session");
+                return "redirect:/login/candidate";
+            }
+
+            // Kiểm tra candidate có null không
+            System.out.println("Candidate: " + candidate.toString());
+
+            // Lấy danh sách kỹ năng dựa trên canId
+            List<CandidateSkill> candidateSkills = candidateSkillRepository.findByCandidateCanId(candidate.getCanId());
+            if (candidateSkills == null || candidateSkills.isEmpty()) {
+                System.out.println("No skills found for candidate ID: " + candidate.getCanId());
+            } else {
+                System.out.println("Skills found: " + candidateSkills.size());
+            }
+
+            // Thêm candidate và candidateSkills vào model
+            model.addAttribute("candidate", candidate);
+            model.addAttribute("candidateSkills", candidateSkills);
+
+            return "ho-so-cua-ban";
+        }
+
+
+
+
+        // -------------------- XỬ LÝ ĐĂNG XUẤT --------------------
+        @GetMapping("/logout")
+        public String logout(HttpSession session) {
+            session.invalidate();
+            System.out.println("👋 Đăng xuất thành công");
+            return "redirect:/login/candidate";
+        }
     }
-}

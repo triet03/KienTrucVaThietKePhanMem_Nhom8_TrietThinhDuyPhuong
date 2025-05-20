@@ -14,6 +14,9 @@ public class HomeCandidateController {
     public String homeCandidate() {
         return "index"; // Tên file HTML trang Nhà tuyển dụng
     }
-
+    @GetMapping("/Timkiemvieclam")
+    public String timKiemViecLam() {
+        return "Timkiemvieclam"; // Spring sẽ tìm file templates/Timkiemvieclam.html
+    }
 
 }

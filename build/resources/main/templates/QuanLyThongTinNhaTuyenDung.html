@@ -9,14 +9,21 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+<<<<<<< HEAD
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+=======
+            font-family: Arial, sans-serif;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         body {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+<<<<<<< HEAD
             background-color: #f4f7fb;
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .header {
@@ -26,12 +33,19 @@
             background: #007bff;
             padding: 15px 30px;
             color: white;
+<<<<<<< HEAD
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .header .logo {
             color: white;
+<<<<<<< HEAD
             font-size: 1.8em;
+=======
+            font-size: 1.5em;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
             text-decoration: none;
             font-weight: bold;
         }
@@ -42,18 +56,25 @@
         }
 
         .header nav ul li {
+<<<<<<< HEAD
             margin: 0 20px;
+=======
+            margin: 0 15px;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .header nav ul li a {
             color: white;
             text-decoration: none;
+<<<<<<< HEAD
             font-weight: 500;
             transition: color 0.3s;
         }
 
         .header nav ul li a:hover {
             color: #ffde00;
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .user-info {
@@ -62,14 +83,22 @@
         }
 
         .user-info .avatar {
+<<<<<<< HEAD
             width: 45px;
             height: 45px;
             border-radius: 50%;
             margin-right: 12px;
+=======
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .user-info .logout {
             color: white;
+<<<<<<< HEAD
             margin-left: 20px;
             text-decoration: none;
             font-weight: 500;
@@ -78,30 +107,44 @@
 
         .user-info .logout:hover {
             color: #ffde00;
+=======
+            margin-left: 15px;
+            text-decoration: none;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .container {
             display: flex;
             flex: 1;
+<<<<<<< HEAD
             background-color: white;
             margin-top: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .sidebar {
             width: 250px;
             background: #f8f9fa;
             padding: 20px;
+<<<<<<< HEAD
             border-right: 1px solid #ddd;
             border-radius: 8px 0 0 8px;
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .sidebar h3 {
             color: #007bff;
+<<<<<<< HEAD
             margin-bottom: 15px;
             font-size: 1.2em;
             font-weight: 600;
+=======
+            margin-bottom: 10px;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .sidebar ul {
@@ -109,12 +152,17 @@
         }
 
         .sidebar ul li {
+<<<<<<< HEAD
             margin: 15px 0;
+=======
+            margin: 10px 0;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .sidebar ul li a {
             text-decoration: none;
             color: #333;
+<<<<<<< HEAD
             font-weight: 500;
             display: block;
             padding: 8px;
@@ -125,10 +173,17 @@
         .sidebar ul li a:hover {
             background-color: #007bff;
             color: white;
+=======
+        }
+
+        .sidebar ul li a:hover {
+            color: #007bff;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .content {
             flex: 1;
+<<<<<<< HEAD
             padding: 30px;
         }
 
@@ -151,10 +206,14 @@
             font-size: 1.4em;
             font-weight: 600;
             margin-bottom: 20px;
+=======
+            padding: 20px;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
     </style>
 </head>
 <body>
+<<<<<<< HEAD
 
 <!-- ===== Header ===== -->
 <div class="header">
@@ -173,6 +232,14 @@
                 </a>
             </div>
         </div>
+=======
+<!-- Header -->
+<div class="header">
+    <a href="/homeCompany" class="logo">Trang Chủ</a>
+    <div class="user-info">
+        <img th:src="@{/img/user-placeholder.png}" class="avatar" alt="User">
+        <span th:text="${userName}">Getvini</span>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         <a th:href="@{/logout}" class="logout">Đăng xuất</a>
     </div>
 </div>
@@ -182,7 +249,11 @@
     <nav class="sidebar">
         <h3>Quản lý tài khoản</h3>
         <ul>
+<<<<<<< HEAD
             <li><a th:href="@{/companyManager}">Tài khoản của bạn</a></li>
+=======
+            <li><a th:href="@{/account}">Tài khoản của bạn</a></li>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         </ul>
 
         <h3>Quản lý hồ sơ</h3>
@@ -203,6 +274,7 @@
     <!-- Nội dung chính -->
     <main class="content">
         <h2>Chào mừng đến với trang quản lý thông tin nhà tuyển dụng</h2>
+<<<<<<< HEAD
 
         <!-- Form chọn công ty -->
         <form th:action="@{/companyManager/quanLyThongTinNhaTuyenDung}" method="get" style="margin-bottom: 20px;">
@@ -235,6 +307,9 @@
         <p th:if="${selectedCompany == null}" style="color: #888; font-style: italic;">Vui lòng chọn một công ty để xem thông tin.</p>
     </main>
 
+=======
+    </main>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
 </div>
 </body>
 </html>

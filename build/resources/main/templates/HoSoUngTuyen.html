@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<<<<<<< HEAD
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Quản lý Hồ sơ Ứng tuyển</title>
@@ -8,11 +9,28 @@
         * {
             margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif;
         }
+=======
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Hồ sơ Ứng tuyển</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         body {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         /* Header */
         .header {
             display: flex;
@@ -22,75 +40,140 @@
             padding: 15px 30px;
             color: white;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .header .logo {
             color: white;
             font-size: 1.5em;
             text-decoration: none;
             font-weight: bold;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .header nav ul {
             list-style: none;
             display: flex;
         }
+<<<<<<< HEAD
         .header nav ul li {
             margin: 0 15px;
         }
+=======
+
+        .header nav ul li {
+            margin: 0 15px;
+        }
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .header nav ul li a {
             color: white;
             text-decoration: none;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .user-info {
             display: flex;
             align-items: center;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .user-info .avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
             margin-right: 10px;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .user-info .logout {
             color: white;
             margin-left: 15px;
             text-decoration: none;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         /* Layout */
         .container {
             display: flex;
             flex: 1;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .sidebar {
             width: 250px;
             background: #f8f9fa;
             padding: 20px;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .sidebar h3 {
             color: #007bff;
             margin-bottom: 10px;
         }
+<<<<<<< HEAD
         .sidebar ul {
             list-style: none;
         }
         .sidebar ul li {
             margin: 10px 0;
         }
+=======
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .sidebar ul li a {
             text-decoration: none;
             color: #333;
         }
+<<<<<<< HEAD
         .sidebar ul li a:hover {
             color: #007bff;
         }
+=======
+
+        .sidebar ul li a:hover {
+            color: #007bff;
+        }
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .content {
             flex: 1;
             padding: 20px;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         /* Table */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
+<<<<<<< HEAD
         table, th, td {
             border: 1px solid #ddd;
         }
@@ -99,16 +182,33 @@
             text-align: left;
             vertical-align: middle;
         }
+=======
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         th {
             background: #007bff;
             color: white;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .btn {
             padding: 5px 10px;
             text-decoration: none;
             color: white;
             background: #28a745;
             border-radius: 3px;
+<<<<<<< HEAD
             font-size: 0.9em;
             border: none;
             cursor: pointer;
@@ -122,16 +222,32 @@
         .btn-delete:hover {
             background: #c82333;
         }
+=======
+        }
+
+        .btn-delete {
+            background: #dc3545;
+        }
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .search-box {
             display: flex;
             margin-bottom: 15px;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .search-box input {
             flex: 1;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 3px;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .search-box button {
             padding: 10px 15px;
             background: #007bff;
@@ -141,6 +257,7 @@
             margin-left: 10px;
             cursor: pointer;
         }
+<<<<<<< HEAD
         .search-box button:hover {
             background: #0056b3;
         }
@@ -204,6 +321,12 @@
     </style>
 </head>
 <body>
+=======
+    </style>
+</head>
+<body>
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
 <!-- Header -->
 <div class="header">
     <a href="/homeCompany" class="logo">Trang Chủ</a>
@@ -216,7 +339,11 @@
         </ul>
     </nav>
     <div class="user-info">
+<<<<<<< HEAD
         <img src="https://cdn1.vieclam24h.vn/images/public/2024/05/15/dummy_company_171575798548.png" class="avatar" alt="User" />
+=======
+        <img src="https://cdn1.vieclam24h.vn/images/public/2024/05/15/dummy_company_171575798548.png" class="avatar" alt="User">
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         <span>Getvini</span>
         <a href="#" class="logout">Đăng xuất</a>
     </div>
@@ -229,11 +356,19 @@
         <ul>
             <li><a href="#">Tài khoản của bạn</a></li>
         </ul>
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         <h3>Quản lý hồ sơ</h3>
         <ul>
             <li><a href="#">Hồ sơ của bạn</a></li>
             <li><a href="#">Trang trí CV</a></li>
         </ul>
+<<<<<<< HEAD
+=======
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         <h3>Quản lý nhà tuyển dụng</h3>
         <ul>
             <li><a href="/companyManager/dangTinTuyenDung">Đăng tin tuyển dụng</a></li>
@@ -246,9 +381,16 @@
     <!-- Nội dung chính -->
     <main class="content">
         <h2>Hồ sơ ứng tuyển</h2>
+<<<<<<< HEAD
         <!-- Tìm kiếm -->
         <div class="search-box">
             <input type="text" placeholder="Nhập từ khóa..." id="searchInput" />
+=======
+
+        <!-- Tìm kiếm -->
+        <div class="search-box">
+            <input type="text" placeholder="Nhập từ khóa..." id="searchInput">
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
             <button type="button" id="searchBtn">Tìm kiếm</button>
         </div>
 
@@ -261,6 +403,7 @@
                 <th>Công ty</th>
                 <th>Ngày ứng tuyển</th>
                 <th>Trạng thái</th>
+<<<<<<< HEAD
                 <th>Ảnh CV</th>
                 <th>Hành động</th>
             </tr>
@@ -373,3 +516,22 @@
 </script>
 </body>
 </html>
+=======
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="application, iterStat : ${applications}">
+                <td th:text="${iterStat.count}"></td>
+                <td th:text="${application.position}"></td>
+                <td th:text="${application.company}"></td>
+                <td th:text="${application.dateApplied}"></td>
+                <td th:text="${application.status}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+
+</body>
+</html>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f

@@ -85,11 +85,14 @@
 		a:hover {
 			text-decoration: underline;
 		}
+<<<<<<< HEAD
 
 		select[multiple] {
 	height: 120px;
 	resize: vertical;
 }
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
 	</style>
 </head>
 <body>
@@ -110,6 +113,7 @@
 
 <form th:action="@{/jobs/save}" method="post">
 	<div>
+<<<<<<< HEAD
 		<label for="jobName">Tên công việc:</label>
 		<input type="text" name="jobName" id="jobName" required />
 	</div>
@@ -128,20 +132,43 @@
 		<label for="company">Công ty:</label>
 		<select name="company.comId" id="company" required>
 			<option value="">Chọn công ty</option>
+=======
+		<label for="jobName">Job Name:</label>
+		<input type="text" name="jobName" id="jobName" required />
+	</div>
+	<div>
+		<label for="jobDesc">Job Description:</label>
+		<input type="text" name="jobDesc" id="jobDesc" required />
+	</div>
+	<div>
+		<label for="company">Company:</label>
+		<select name="company.comId" id="company" required>
+			<option value="">Select Company</option>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
 			<option th:each="company : ${companies}" th:value="${company.comId}"
 					th:text="${company.compName}"></option>
 		</select>
 	</div>
+<<<<<<< HEAD
 
 	<div>
 		<label for="skills">Kỹ năng yêu cầu (Có thể chọn nhiều):</label>
 		<select name="skillIds" id="skills" multiple required style="height: 120px;">
+=======
+	<div>
+		<label for="skills">Skills:</label>
+		<select name="skillIds" id="skills" multiple required>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
 			<option th:each="skill : ${skills}" th:value="${skill.skillId}"
 					th:text="${skill.skillName}"></option>
 		</select>
 	</div>
+<<<<<<< HEAD
 
 	<button type="submit">Tạo Công Việc</button>
+=======
+	<button type="submit">Create Job</button>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
 </form>
 
 <a href="/jobs">Back to Job List</a>

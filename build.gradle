@@ -25,6 +25,12 @@ repositories {
 
 dependencies {
 
+<<<<<<< HEAD
+=======
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -43,6 +49,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
+<<<<<<< HEAD
 //For Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
@@ -53,6 +60,8 @@ dependencies {
 //For RateLimiter
     implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.1.0'
 
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
 
 }
 

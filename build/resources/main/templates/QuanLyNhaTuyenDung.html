@@ -4,23 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Nhà tuyển dụng</title>
+<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+<<<<<<< HEAD
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+=======
+            font-family: Arial, sans-serif;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         body {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+<<<<<<< HEAD
             background-color: #f4f7fb;
         }
 
         /* ===== Header ===== */
+=======
+        }
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .header {
             display: flex;
             justify-content: space-between;
@@ -28,6 +40,7 @@
             background: #007bff;
             padding: 15px 30px;
             color: white;
+<<<<<<< HEAD
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
@@ -36,6 +49,29 @@
             font-weight: bold;
             text-decoration: none;
             color: white;
+=======
+        }
+
+        .header .logo {
+            color: white;
+            font-size: 1.5em;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .header nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .header nav ul li {
+            margin: 0 15px;
+        }
+
+        .header nav ul li a {
+            color: white;
+            text-decoration: none;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .user-info {
@@ -44,6 +80,7 @@
         }
 
         .user-info .avatar {
+<<<<<<< HEAD
             width: 45px;
             height: 45px;
             border-radius: 50%;
@@ -53,10 +90,17 @@
         .user-info span {
             font-weight: 500;
             margin-right: 20px;
+=======
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .user-info .logout {
             color: white;
+<<<<<<< HEAD
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
@@ -77,23 +121,43 @@
         }
 
         /* ===== Sidebar ===== */
+=======
+            margin-left: 15px;
+            text-decoration: none;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+        }
+
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .sidebar {
             width: 250px;
             background: #f8f9fa;
             padding: 20px;
+<<<<<<< HEAD
             border-right: 1px solid #ddd;
             border-radius: 8px 0 0 8px;
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .sidebar h3 {
             color: #007bff;
             margin-bottom: 10px;
+<<<<<<< HEAD
             font-size: 1.1em;
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .sidebar ul {
             list-style: none;
+<<<<<<< HEAD
             margin-bottom: 20px;
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .sidebar ul li {
@@ -103,6 +167,7 @@
         .sidebar ul li a {
             text-decoration: none;
             color: #333;
+<<<<<<< HEAD
             font-weight: 500;
             display: flex;
             align-items: center;
@@ -232,27 +297,61 @@
         </div>
 
 
+=======
+        }
+
+        .sidebar ul li a:hover {
+            color: #007bff;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<div class="header">
+    <a href="/homeCompany" class="logo">Trang Chủ</a>
+    <div class="user-info">
+        <img th:src="@{/img/user-placeholder.png}" class="avatar" alt="User">
+        <span th:text="${userName}">Getvini</span>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         <a th:href="@{/logout}" class="logout">Đăng xuất</a>
     </div>
 </div>
 
+<<<<<<< HEAD
 <!-- ===== Main Container ===== -->
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
 <div class="container">
     <!-- Sidebar -->
     <nav class="sidebar">
         <h3>Quản lý tài khoản</h3>
         <ul>
+<<<<<<< HEAD
             <li><a th:href="@{/companyManager}"><i class="fas fa-user"></i> Tài khoản của bạn</a></li>
+=======
+            <li><a th:href="@{/account}">Tài khoản của bạn</a></li>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         </ul>
 
         <h3>Quản lý hồ sơ</h3>
         <ul>
+<<<<<<< HEAD
             <li><a th:href="@{/profile}"><i class="fas fa-file-alt"></i> Hồ sơ của bạn</a></li>
             <li><a th:href="@{/decorate-cv}"><i class="fas fa-paint-brush"></i> Trang trí CV</a></li>
+=======
+            <li><a th:href="@{/profile}">Hồ sơ của bạn</a></li>
+            <li><a th:href="@{/decorate-cv}">Trang trí CV</a></li>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         </ul>
 
         <h3>Quản lý nhà tuyển dụng</h3>
         <ul>
+<<<<<<< HEAD
             <li><a href="/companyManager/dangTinTuyenDung"><i class="fas fa-plus-circle"></i> Đăng tin tuyển dụng</a></li>
             <li><a href="/companyManager/dangKyGoiTin"><i class="fas fa-box"></i> Đăng ký gói tin</a></li>
             <li><a href="/companyManager/hoSoUngTuyen"><i class="fas fa-folder-open"></i> Xem hồ sơ ứng tuyển</a></li>
@@ -269,3 +368,19 @@
 
 </body>
 </html>
+=======
+            <li><a href="/companyManager/dangTinTuyenDung">Đăng tin tuyển dụng</a></li>
+            <li><a href="/companyManager/dangKyGoiTin">Đăng ký gói tin</a></li>
+            <li><a href="/companyManager/hoSoUngTuyen">Xem hồ sơ ứng tuyển</a></li>
+            <li><a href="/companyManager/quanLyThongTinNhaTuyenDung">Quản lý thông tin nhà tuyển dụng</a></li>
+        </ul>
+    </nav>
+
+    <!-- Nội dung chính -->
+    <main class="content">
+        <h2>Chào mừng đến với trang quản lý</h2>
+    </main>
+</div>
+</body>
+</html>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f

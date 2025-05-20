@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>Đăng Tin Tuyển Dụng</title>
+=======
+    <title>Quản lý Tin Đăng</title>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
     <style>
         * {
             margin: 0;
@@ -16,9 +20,15 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+<<<<<<< HEAD
             background-color: #f4f7fb;
         }
 
+=======
+        }
+
+        /* Header */
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         .header {
             display: flex;
             justify-content: space-between;
@@ -26,6 +36,7 @@
             background: #007bff;
             padding: 15px 30px;
             color: white;
+<<<<<<< HEAD
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
@@ -43,17 +54,38 @@
 
         .header nav ul li {
             margin: 0 20px;
+=======
+        }
+
+        .header .logo {
+            color: white;
+            font-size: 1.5em;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .header nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .header nav ul li {
+            margin: 0 15px;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .header nav ul li a {
             color: white;
             text-decoration: none;
+<<<<<<< HEAD
             font-weight: 500;
             transition: color 0.3s;
         }
 
         .header nav ul li a:hover {
             color: #ffde00;
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .user-info {
@@ -62,6 +94,7 @@
         }
 
         .user-info .avatar {
+<<<<<<< HEAD
             width: 45px;
             height: 45px;
             border-radius: 50%;
@@ -70,10 +103,17 @@
 
         .user-info span {
             margin-right: 12px;
+=======
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .user-info .logout {
             color: white;
+<<<<<<< HEAD
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
@@ -87,21 +127,38 @@
             display: flex;
             flex: 1;
             margin-top: 20px;
+=======
+            margin-left: 15px;
+            text-decoration: none;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            flex: 1;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .sidebar {
             width: 250px;
             background: #f8f9fa;
             padding: 20px;
+<<<<<<< HEAD
             border-right: 1px solid #ddd;
             border-radius: 8px 0 0 8px;
+=======
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .sidebar h3 {
             color: #007bff;
+<<<<<<< HEAD
             font-size: 1.2em;
             font-weight: 600;
             margin-bottom: 15px;
+=======
+            margin-bottom: 10px;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .sidebar ul {
@@ -109,12 +166,17 @@
         }
 
         .sidebar ul li {
+<<<<<<< HEAD
             margin: 15px 0;
+=======
+            margin: 10px 0;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .sidebar ul li a {
             text-decoration: none;
             color: #333;
+<<<<<<< HEAD
             font-weight: 500;
             display: block;
             padding: 8px;
@@ -125,10 +187,17 @@
         .sidebar ul li a:hover {
             background-color: #007bff;
             color: white;
+=======
+        }
+
+        .sidebar ul li a:hover {
+            color: #007bff;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
 
         .content {
             flex: 1;
+<<<<<<< HEAD
             padding: 30px;
         }
 
@@ -161,6 +230,12 @@
             background: #dc3545;
         }
 
+=======
+            padding: 20px;
+        }
+
+        /* Table */
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         table {
             width: 100%;
             border-collapse: collapse;
@@ -177,6 +252,7 @@
         }
 
         th {
+<<<<<<< HEAD
             background-color: #007bff;
             color: white;
         }
@@ -184,13 +260,33 @@
         ul {
             padding-left: 20px;
             margin: 0;
+=======
+            background: #007bff;
+            color: white;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: white;
+            background: #28a745;
+            border-radius: 3px;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
         }
     </style>
 </head>
 <body>
 
 <!-- Header -->
+<<<<<<< HEAD
 <header class="header">
+=======
+<div class="header">
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
     <a href="/homeCompany" class="logo">Trang Chủ</a>
     <nav>
         <ul>
@@ -205,6 +301,7 @@
         <span>Getvini</span>
         <a href="#" class="logout">Đăng xuất</a>
     </div>
+<<<<<<< HEAD
 </header>
 
 <!-- Main layout -->
@@ -245,11 +342,35 @@
                 <th>Lương</th>
                 <th>Kỹ năng</th>
                 <th>Trạng thái</th>
+=======
+</div>
+
+<div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <h3>Quản lý tin tuyển dụng</h3>
+        <ul>
+            <li><a href="/jobs">Quản lý Tin Đăng</a></li>
+        </ul>
+    </nav>
+
+    <!-- Nội dung chính -->
+    <main class="content">
+        <h2>Danh sách tin tuyển dụng</h2>
+        <a th:href="@{/jobs/add}" class="btn">Thêm Tin Đăng</a>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tiêu đề</th>
+                <th>Mô tả</th>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
                 <th>Hành động</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="job : ${jobs}">
+<<<<<<< HEAD
                 <td th:text="${job.jobId}"></td>
                 <td th:text="${job.jobName} ?: 'Chưa xác định'"></td>
                 <td th:text="${job.jobDesc} ?: 'Chưa xác định'"></td>
@@ -267,6 +388,14 @@
                     <a th:href="@{/jobs/edit/{id}(id=${job.jobId})}" class="btn">Sửa</a>
                     <a th:href="@{/jobs/delete/{id}(id=${job.jobId})}" class="btn btn-delete"
                        onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+=======
+                <td th:text="${job.id}"></td>
+                <td th:text="${job.title}"></td>
+                <td th:text="${job.description}"></td>
+                <td>
+                    <a th:href="@{/jobs/edit/{id}(id=${job.id})}" class="btn">Sửa</a>
+                    <a th:href="@{/jobs/delete/{id}(id=${job.id})}" class="btn btn-delete">Xóa</a>
+>>>>>>> e273d6e954013a77d02132eb35d0e3d201d2959f
                 </td>
             </tr>
             </tbody>

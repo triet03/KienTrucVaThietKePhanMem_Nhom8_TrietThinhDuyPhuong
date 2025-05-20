@@ -1,103 +1,153 @@
 package vn.edu.iuh.fit.backEnd.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vn.edu.iuh.fit.backEnd.models.Candidate;
-import vn.edu.iuh.fit.backEnd.models.CandidateSkill;
-import vn.edu.iuh.fit.backEnd.models.VerificationCode;
 import vn.edu.iuh.fit.backEnd.repositories.CandidateRepository;
-import vn.edu.iuh.fit.backEnd.repositories.CandidateSkillRepository;
-import vn.edu.iuh.fit.backEnd.repositories.VerificationCodeRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CandidateService {
-    private static final Logger logger = LoggerFactory.getLogger(CandidateService.class);
 
     @Autowired
     private CandidateRepository candidateRepository;
 
-    @Autowired
-    private CandidateSkillRepository candidateSkillRepository;
-
-    @Autowired
-    private VerificationCodeRepository verificationCodeRepository;
-
-    @Autowired
-    private EmailService emailService;
-
+    /**
+     * Lấy tất cả các ứng viên
+     * @return danh sách ứng viên
+     */
+    @Transactional(readOnly = true)
     public List<Candidate> getAllCandidates() {
         return candidateRepository.findAll();
     }
 
+    /**
+     * Lấy ứng viên theo ID
+     * @param id ID của ứng viên
+     * @return ứng viên hoặc null nếu không tìm thấy
+     * @throws IllegalArgumentException nếu id là null
+     */
+    @Transactional(readOnly = true)
     public Candidate getCandidateById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
         Optional<Candidate> optionalCandidate = candidateRepository.findById(id);
         return optionalCandidate.orElse(null);
     }
 
-    @Cacheable(value = "candidates", key = "#email")
-    public Candidate findByEmail(String email) {
-        logger.info("Calling findByEmail with email: {}", email);
-        return candidateRepository.findByEmail(email).orElse(null);
-    }
-
+    /**
+     * Tạo mới một ứng viên
+     * @param candidate đối tượng ứng viên cần tạo
+     * @return ứng viên đã được lưu
+     */
+    @Transactional
     public Candidate createCandidate(Candidate candidate) {
+        if (candidate == null) {
+            throw new IllegalArgumentException("Candidate cannot be null");
+        }
         return candidateRepository.save(candidate);
     }
 
+    /**
+     * Cập nhật thông tin ứng viên
+     * @param id ID của ứng viên cần cập nhật
+     * @param candidateDetails thông tin mới của ứng viên
+     * @return ứng viên đã được cập nhật
+     * @throws EntityNotFoundException nếu không tìm thấy ứng viên
+     */
+    @Transactional
     public Candidate updateCandidate(Long id, Candidate candidateDetails) {
-        Candidate candidate = getCandidateById(id);
+        if (id == null || candidateDetails == null) {
+            throw new IllegalArgumentException("ID or candidate details cannot be null");
+        }
+        Candidate candidate = candidateRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Candidate not found with id: " + id));
+
+        // Cập nhật các trường từ candidateDetails
         candidate.setFullName(candidateDetails.getFullName());
         candidate.setEmail(candidateDetails.getEmail());
         candidate.setPhone(candidateDetails.getPhone());
         candidate.setDob(candidateDetails.getDob());
         candidate.setAddress(candidateDetails.getAddress());
-        candidate.setPassword(candidateDetails.getPassword());
+        candidate.setSummary(candidateDetails.getSummary()); // Đảm bảo bao gồm summary
+
         return candidateRepository.save(candidate);
     }
 
+    /**
+     * Xóa ứng viên theo ID
+     * @param id ID của ứng viên cần xóa
+     * @throws EntityNotFoundException nếu không tìm thấy ứng viên
+     */
+    @Transactional
     public void deleteCandidate(Long id) {
-        Candidate candidate = getCandidateById(id);
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+        Candidate candidate = candidateRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Candidate not found with id: " + id));
         candidateRepository.delete(candidate);
     }
 
-    public List<CandidateSkill> getCandidateSkills(Long canId) {
-        return candidateSkillRepository.findByCandidateCanId(canId);
-    }
-
-    public void sendAndSaveVerificationCode(String email) {
-        String code = emailService.generateVerificationCode();
-        emailService.sendVerificationCode(email, code);
-
-        // Lưu mã xác thực với thời gian hết hạn 10 phút
-        VerificationCode verificationCode = new VerificationCode(
-                email,
-                code,
-                LocalDateTime.now().plusMinutes(10)
-        );
-        verificationCodeRepository.save(verificationCode);
-    }
-
-    public boolean verifyCode(String email, String code) {
-        Optional<VerificationCode> optionalCode = verificationCodeRepository.findByEmailAndCode(email, code);
-        if (optionalCode.isPresent()) {
-            VerificationCode verificationCode = optionalCode.get();
-            if (!verificationCode.isExpired()) {
-                verificationCodeRepository.delete(verificationCode); // Xóa mã sau khi xác thực thành công
-                return true;
-            }
+    /**
+     * Lưu ứng viên (dùng cho cả tạo mới và cập nhật)
+     * @param candidate đối tượng ứng viên cần lưu
+     * @return ứng viên đã được lưu
+     */
+    @Transactional
+    public Candidate saveCandidate(Candidate candidate) {
+        if (candidate == null) {
+            throw new IllegalArgumentException("Candidate cannot be null");
         }
-        return false;
+        return candidateRepository.save(candidate);
     }
 
-    public void deleteVerificationCodeByEmail(String email) {
-        Optional<VerificationCode> optionalCode = verificationCodeRepository.findByEmail(email);
-        optionalCode.ifPresent(verificationCodeRepository::delete);
+    /**
+     * Kiểm tra xem email đã tồn tại chưa
+     * @param email email cần kiểm tra
+     * @return true nếu email đã tồn tại, false nếu không
+     */
+    @Transactional(readOnly = true)
+    public boolean existsByEmail(String email) {
+        if (email == null) {
+            return false;
+        }
+        return candidateRepository.findByEmail(email) != null;
+    }
+
+    /**
+     * Đăng nhập ứng viên
+     * @param email email của ứng viên
+     * @param password mật khẩu
+     * @return ứng viên nếu đăng nhập thành công, null nếu thất bại
+     */
+    @Transactional(readOnly = true)
+    public Candidate login(String email, String password) {
+        if (email == null || password == null) {
+            return null;
+        }
+        Candidate candidate = candidateRepository.findByEmail(email);
+        if (candidate != null && candidate.getPassword().equals(password)) {
+            return candidate;
+        }
+        return null;
+    }
+
+    /**
+     * Tìm ứng viên theo email
+     * @param email email của ứng viên
+     * @return ứng viên hoặc null nếu không tìm thấy
+     */
+    @Transactional(readOnly = true)
+    public Candidate findByEmail(String email) {
+        if (email == null) {
+            return null;
+        }
+        return candidateRepository.findByEmail(email);
     }
 }
