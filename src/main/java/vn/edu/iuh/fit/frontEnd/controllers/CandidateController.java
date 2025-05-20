@@ -76,9 +76,9 @@ public class CandidateController {
     @GetMapping("/{id}")
     public String getCandidateDetails(@PathVariable("id") Long id, Model model) {
         Candidate candidate = candidateService.getCandidateById(id);
-        List<CandidateSkill> skills = candidateService.getCandidateSkills(id);
+//        List<CandidateSkill> skills = candidateService.getCandidateSkills(id);
         model.addAttribute("candidate", candidate);
-        model.addAttribute("candidateSkills", skills);
+//        model.addAttribute("candidateSkills", skills);
         return "candidate-details";
     }
 

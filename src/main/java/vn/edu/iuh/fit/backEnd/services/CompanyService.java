@@ -6,14 +6,14 @@ import vn.edu.iuh.fit.backEnd.models.Company;
 import vn.edu.iuh.fit.backEnd.repositories.CompanyRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CompanyService {
-
     @Autowired
     private CompanyRepository companyRepository;
 
-    // Placeholder: Implement email sending logic if needed
+    // Gửi email (nếu cần mở rộng)
     public static void sendEmail(String email, String subject, String text) {
         // Email logic here (hiện đang để trống)
     }
@@ -23,12 +23,7 @@ public class CompanyService {
     }
 
     public Company getCompanyById(Long id) {
-        return companyRepository.findById(id)
-                .orElse(null); // Hoặc throw new NotFoundException(id)
-    }
-
-    public Company getCompanyByName(String name) {
-        return companyRepository.findByCompName(name);
+        return companyRepository.findById(id).orElse(null);
     }
 
     public Company createCompany(Company company) {
@@ -37,38 +32,30 @@ public class CompanyService {
 
     public Company updateCompany(Long id, Company companyDetails) {
         Company company = getCompanyById(id);
-        if (company == null) {
-            throw new RuntimeException("Company not found with id " + id);
-        }
-
-        company.setCompName(companyDetails.getCompName());
-        company.setAbout(companyDetails.getAbout());
-        company.setEmail(companyDetails.getEmail());
-        company.setPhone(companyDetails.getPhone());
-        company.setWebUrl(companyDetails.getWebUrl());
-
-        if (company.getAddress() != null && companyDetails.getAddress() != null) {
-            company.getAddress().setAddId(companyDetails.getAddress().getAddId());
-        } else {
+        if (company != null) {
+            company.setCompName(companyDetails.getCompName());
+            company.setAbout(companyDetails.getAbout());
+            company.setEmail(companyDetails.getEmail());
+            company.setPhone(companyDetails.getPhone());
+            company.setWebUrl(companyDetails.getWebUrl());
             company.setAddress(companyDetails.getAddress());
+            return companyRepository.save(company);
         }
-
-        return companyRepository.save(company);
+        return null;
     }
 
     public void deleteCompany(Long id) {
         Company company = getCompanyById(id);
         if (company != null) {
             companyRepository.delete(company);
-        } else {
-            throw new RuntimeException("Company not found to delete with id " + id);
         }
     }
 
-    // For login/registration features
+    // 🔥 Thêm cho đăng ký / đăng nhập
     public Company findByEmail(String email) {
         return companyRepository.findByEmail(email).orElse(null);
     }
+
 
     public boolean existsByEmail(String email) {
         return companyRepository.findByEmail(email).isPresent();

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Ký Người Tìm Việc</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 15px 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: left;
+    }
+
+    header a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 30px;
+      background: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    h2 {
+      color: #007bff;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .verify-code-container {
+      display: flex;
+      gap: 10px;
+    }
+
+    .verify-code-container input {
+      flex: 2;
+    }
+
+    .verify-code-container button {
+      flex: 1;
+      margin: 0;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/homeCandidate">Trang Chủ</a>
+</header>
+
+<div class="container">
+  <h2>Đăng Ký Người Tìm Việc</h2>
+
+  <!-- ✅ Sửa action ở đây -->
+  <form th:action="@{/register/confirm}" method="post">
+    <input type="text" name="fullName" placeholder="Họ và tên" required>
+    <input type="email" id="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Mật khẩu" required>
+
+    <div class="verify-code-container">
+      <input type="text" id="verifyCode" name="verifyCode" placeholder="Mã xác thực" required>
+      <button type="button" onclick="sendCode()">Gửi mã</button>
+    </div>
+
+    <div id="status" class="error" th:text="${error}"></div>
+
+    <button type="submit">Đăng Ký</button>
+  </form>
+
+  <p>Đã có tài khoản? <a th:href="@{/login/candidate}">Đăng nhập</a></p>
+</div>
+
+<script>
+  function sendCode() {
+    const email = document.getElementById("email").value;
+    const status = document.getElementById("status");
+
+    if (!email) {
+      status.textContent = "Vui lòng nhập email trước khi gửi mã.";
+      return;
+    }
+
+    fetch("/register/send-code", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: "email=" + encodeURIComponent(email)
+    })
+            .then(response => response.text())
+            .then(text => {
+              if (text === "exists") {
+                status.textContent = "Email đã tồn tại trong hệ thống.";
+              } else if (text === "invalid") {
+                status.textContent = "Email không đúng định dạng.";
+              } else if (text === "sent") {
+                status.textContent = "Mã xác thực đã được gửi đến email của bạn.";
+              } else {
+                status.textContent = "Đã có lỗi xảy ra. Vui lòng thử lại.";
+              }
+            });
+  }
+</script>
+
+</body>
+</html>

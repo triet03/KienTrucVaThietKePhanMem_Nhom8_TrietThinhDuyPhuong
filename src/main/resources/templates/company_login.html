@@ -63,55 +63,31 @@
 </head>
 <body>
 
-<header>
-  <a href="/homeCompany">Trang Chủ</a>
-</header>
+<!--<header>-->
+<!--  <a href="/homeCompany">Trang Chủ</a>-->
+<!--</header>-->
 
 <div class="container">
   <h2>Đăng Nhập Nhà Tuyển Dụng</h2>
 
-  <!-- Hiển thị thông báo nếu có -->
-  <div th:if="${message}" style="color: green; font-weight: bold;">
-    <p th:text="${message}"></p>
+  <!-- THÔNG BÁO THÀNH CÔNG -->
+  <div th:if="${success}" style="color: green; font-weight: bold; margin-bottom: 10px;">
+    <p th:text="${success}"></p>
   </div>
-  <div th:if="${error}" style="color: red; font-weight: bold;">
+
+  <!-- THÔNG BÁO LỖI -->
+  <div th:if="${error}" style="color: red; font-weight: bold; margin-bottom: 10px;">
     <p th:text="${error}"></p>
   </div>
 
-  <form th:action="@{/login/company}" method="post" onsubmit="return checkAdminLogin(event)">
-    <input type="text" id="email" name="email" placeholder="Email" required>
-    <input type="password" id="password" name="password" placeholder="Mật khẩu" required>
+  <form th:action="@{/login/company}" method="post">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Mật khẩu" required>
     <button type="submit">Đăng Nhập</button>
   </form>
 
-
   <p>Chưa có tài khoản? <a th:href="@{/register/company}">Đăng ký ngay</a></p>
 </div>
-
-<script>
-  function checkAdminLogin(event) {
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    // ✅ Truy cập tài khoản admin test
-    if (email === "admin@gmail.com" && password === "123456") {
-      event.preventDefault();
-      window.location.href = "/admin/jobs";
-      return false;
-    }
-
-    // ✅ Truy cập tài khoản công ty test
-    if (email === "nguyenbaminhtriet0947+3@gmail.com" && password === "123456") {
-      event.preventDefault();
-      window.location.href = "/companyManager";
-      return false;
-    }
-
-    // ✅ Cho phép submit form bình thường nếu không khớp
-    return true;
-  }
-</script>
-
 
 </body>
 </html>

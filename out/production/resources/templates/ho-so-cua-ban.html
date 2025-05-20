@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Hồ Sơ Của Bạn</title>
+  <style>
+    /* Header */
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 15px 20px;
+      text-align: left;
+      font-size: 18px;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    .home-button {
+      background-color: #007bff; /* Màu nền giống màu header */
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    /* Loại bỏ hiệu ứng hover */
+    /* .home-button:hover {
+        background-color: #0062cc; // Không có hiệu ứng hover nữa
+    } */
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background-color: white; /* Đổi màu nền thành trắng */
+      padding-top: 20px;
+      color: #4e73df;
+      height: 100vh;
+      position: fixed;
+      padding-left: 10px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Thêm bóng cho sidebar */
+      top: 60px; /* Đẩy sidebar xuống dưới header */
+    }
+
+    .sidebar a {
+      color: #4e73df;
+      padding: 10px;
+      text-decoration: none;
+      display: block;
+      font-size: 16px;
+      border-left: 5px solid transparent;
+      position: relative;
+    }
+
+    .sidebar a:hover {
+      background-color: #f1f1f1;
+      border-left: 5px solid #007bff;
+    }
+
+    .sidebar .submenu a {
+      font-size: 14px;
+      padding-left: 30px;
+    }
+
+    .submenu {
+      display: none;
+    }
+
+    /* Accordion Effect */
+    .submenu.active {
+      display: block;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 250px;
+      padding: 30px;
+      flex-grow: 1;
+      margin-top: 80px; /* Đẩy nội dung chính xuống dưới header */
+    }
+
+    .main-content h2 {
+      color: #007bff;
+    }
+
+    /* Styles cho thông tin cá nhân và kỹ năng */
+    .info-row {
+      margin-bottom: 15px;
+    }
+
+    .label {
+      font-weight: bold;
+      display: inline-block;
+      width: 160px;
+      color: #333;
+    }
+
+    .value {
+      color: #555;
+    }
+
+    .skills-section {
+      margin-top: 20px;
+    }
+
+    .skills-section h3 {
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+
+    .skills {
+      padding-left: 20px;
+    }
+
+    .skills li {
+      background-color: #e9ecef;
+      padding: 8px 12px;
+      margin: 5px 0;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .edit-button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+      margin-top: 15px;
+      display: inline-block;
+    }
+
+    .edit-button:hover {
+      background-color: #0056b3;
+    }
+
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <button class="home-button" onclick="goHome()">Trang Chủ</button>
+</header>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <a href="javascript:void(0);" onclick="toggleSubMenu('submenu1')">Quản lý tài khoản</a>
+  <div id="submenu1" class="submenu">
+    <a href="#">Tài khoản của bạn</a>
+  </div>
+
+  <a href="javascript:void(0);" onclick="toggleSubMenu('submenu2')">Quản lý hồ sơ</a>
+  <div id="submenu2" class="submenu">
+    <a href="/hoso-cua-ban">Hồ sơ của bạn</a>
+    <a href="/hoso-candidate">Cập nhật thông tin</a>
+  </div>
+
+  <a href="javascript:void(0);" onclick="toggleSubMenu('submenu3')">Quản lý việc làm</a>
+  <div id="submenu3" class="submenu">
+    <a href="#">Việc làm đã ứng tuyển</a>
+    <a href="#">Việc làm đã lưu</a>
+    <a href="#">Việc làm chờ ứng tuyển</a>
+    <a href="#">Thông báo việc làm</a>
+    <a href="/Timkiemvieclam">Tìm kiếm việc làm</a>
+
+  </div>
+
+  <a href="javascript:void(0);" onclick="toggleSubMenu('submenu4')">Nhà tuyển dụng bạn quan tâm</a>
+  <div id="submenu4" class="submenu">
+    <a href="#">Nhà tuyển dụng xem hồ sơ bạn</a>
+    <a href="#">Nhà tuyển dụng đang theo dõi</a>
+  </div>
+
+  <a href="javascript:void(0);" onclick="toggleSubMenu('submenu5')">Hỗ trợ và thông báo</a>
+  <div id="submenu5" class="submenu">
+    <a href="#">Việc làm 24h thông báo</a>
+    <a href="#">Hướng dẫn sử dụng</a>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+  <!-- Hiển thị thông báo lỗi nếu candidate là null -->
+  <div class="error-message" th:if="${candidate == null}">
+    Lỗi: Không tìm thấy thông tin ứng viên. Vui lòng đăng nhập lại.
+  </div>
+
+  <!-- Hiển thị thông tin ứng viên nếu candidate không null -->
+  <div th:if="${candidate != null}" th:object="${candidate}">
+    <h2>Hồ Sơ Cá Nhân</h2>
+
+    <div class="info-row">
+      <span class="label">Họ và tên:</span>
+      <span class="value" th:text="*{fullName} ?: 'Chưa cập nhật'">Họ tên</span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">Email:</span>
+      <span class="value" th:text="*{email} ?: 'Chưa cập nhật'">Email</span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">Số điện thoại:</span>
+      <span class="value" th:text="*{phone} ?: 'Chưa cập nhật'">Số điện thoại</span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">Ngày sinh:</span>
+      <span class="value" th:text="${#dates.format(candidate.dob, 'dd/MM/yyyy')} ?: 'Chưa cập nhật'">Ngày sinh</span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">Tóm tắt:</span>
+      <span class="value" th:text="*{summary} ?: 'Chưa cập nhật'">Tóm tắt</span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">Địa chỉ:</span>
+      <span class="value" th:text="${candidate.address != null} ? *{address.street + ', ' + address.city + ', ' + address.zipcode + ', ' + address.country} : 'Chưa cập nhật'">Địa chỉ đầy đủ</span>
+    </div>
+
+    <div class="skills-section">
+      <h3>Kỹ năng</h3>
+      <ul class="skills" th:if="${candidateSkills != null and not #lists.isEmpty(candidateSkills)}">
+        <li th:each="skill : ${candidateSkills}">
+          <span th:text="${skill.skill.name} + ' (Mức độ: ' + skill.skillLevel + ')'"></span>
+          <span th:if="${skill.moreInfos != null and not #strings.isEmpty(skill.moreInfos)}" th:text="' - ' + ${skill.moreInfos}"></span>
+        </li>
+      </ul>
+      <div th:unless="${candidateSkills != null and not #lists.isEmpty(candidateSkills)}" class="value">Chưa có kỹ năng nào được thêm.</div>
+      <button class="edit-button" onclick="window.location.href='/hoso-candidate'">Chỉnh sửa thông tin</button>
+    </div>
+  </div>
+
+  <a href="/tranghosonguoidung" class="back-btn">← Quay lại Dashboard</a>
+</div>
+
+<script>
+  function toggleSubMenu(submenuId) {
+    var submenu = document.getElementById(submenuId);
+    if (submenu.classList.contains('active')) {
+      submenu.classList.remove('active');
+    } else {
+      submenu.classList.add('active');
+    }
+  }
+
+  function goHome() {
+    window.location.href = "/tranghosonguoidung"; // Điều hướng về dashboard khi nhấn "Trang Chủ"
+  }
+</script>
+
+</body>
+</html>

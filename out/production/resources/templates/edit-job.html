@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Chỉnh sửa tin tuyển dụng</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7fb;
+        padding: 20px;
+    }
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        margin: 10px 0 5px;
+        font-weight: bold;
+    }
+    input, textarea, select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    button {
+        padding: 10px 20px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #218838;
+    }
+    .back-link {
+        display: inline-block;
+        margin-top: 10px;
+        color: #007bff;
+        text-decoration: none;
+    }
+    .error {
+        color: red;
+        margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>Chỉnh sửa tin tuyển dụng</h2>
+  <div th:if="${error}" class="error" th:text="${error}"></div>
+  <form th:action="@{/jobs/update}" method="post">
+    <input type="hidden" th:field="${job.jobId}" name="jobId">
+    <label>Tên công việc</label>
+    <input type="text" th:field="${job.jobName}" name="jobName" required>
+
+    <label>Mô tả công việc</label>
+    <textarea th:field="${job.jobDesc}" name="jobDesc" rows="5" required></textarea>
+
+    <label>Lương</label>
+    <input type="number" th:field="${job.salary}" name="salary" required>
+
+    <label>Công ty</label>
+    <select name="companyId" required>
+      <option value="" th:text="'Chọn công ty'" th:selected="${job.company == null}"></option>
+      <option th:each="company : ${companies}"
+              th:value="${company.compId}"
+              th:text="${company.compName}"
+              th:selected="${job.company != null and company.compId == job.company.compId}"></option>
+    </select>
+
+    <label>Kỹ năng</label>
+    <div th:each="skill : ${skills}">
+      <input type="checkbox"
+             name="skillIds"
+             th:value="${skill.skillId}"
+             th:checked="${selectedSkillIds.contains(skill.skillId)}">
+      <label th:text="${skill.skillName}"></label>
+    </div>
+
+    <button type="submit">Lưu</button>
+  </form>
+  <a th:href="@{/jobs/pending}" class="back-link">Quay lại</a>
+</div>
+</body>
+</html>

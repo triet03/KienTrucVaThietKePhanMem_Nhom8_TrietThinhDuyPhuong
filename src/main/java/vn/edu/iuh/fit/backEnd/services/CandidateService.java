@@ -131,7 +131,7 @@ public class CandidateService {
         if (email == null || password == null) {
             return null;
         }
-        Candidate candidate = candidateRepository.findByEmail(email);
+        Candidate candidate = candidateRepository.findByEmail(email).orElse(null);
         if (candidate != null && candidate.getPassword().equals(password)) {
             return candidate;
         }
@@ -148,6 +148,6 @@ public class CandidateService {
         if (email == null) {
             return null;
         }
-        return candidateRepository.findByEmail(email);
+        return candidateRepository.findByEmail(email).orElse(null);
     }
 }

@@ -21,6 +21,7 @@ public class CandidateSkillService {
     @Autowired
     private SkillRepository skillRepository;
 
+
     public List<CandidateSkill> getAllCandidateSkills() {
         return candidateSkillRepository.findAll();
     }

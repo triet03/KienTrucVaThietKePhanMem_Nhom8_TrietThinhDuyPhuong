@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chủ Tìm Việc</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Thêm Font Awesome cho icon -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a.logo {
+            font-size: 26px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin-left: 25px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        nav ul li a:hover {
+            color: #f8d210;
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 123, 255, 0.8), rgba(0, 123, 255, 0.8)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            color: #fff;
+            padding: 60px 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: 40px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin: 15px 0 25px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 0 15px;
+            padding: 12px 25px;
+            background-color: #f8d210;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            background-color: #e6c20f;
+            transform: translateY(-3px);
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+
+        .feature {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            margin: 15px;
+            padding: 25px;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature h3 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #007bff;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature h3 i {
+            margin-right: 10px;
+            color: #f8d210;
+        }
+
+        .feature p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        .articles {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .articles h2 {
+            font-size: 32px;
+            color: #007bff;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .articles h2::after {
+            content: '';
+            width: 50px;
+            height: 3px;
+            background-color: #f8d210;
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .article-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .article-card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            padding: 25px;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .article-card a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .article-card a:hover {
+            color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .feature, .article-card {
+                width: 80%;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <a href="/homeCandidate" class="logo">Trang Chủ</a>
+        <ul>
+            <li><a href="/jobs">Công việc</a></li>
+            <li><a href="/homeCompany">Bạn là nhà tuyển dụng?</a></li>
+        </ul>
+    </nav>
+</header>
+<div class="container">
+    <div class="hero">
+        <h1>Chào mừng đến với Trang Web Ứng Viên</h1>
+        <p>Tìm kiếm công việc phù hợp và kết nối với nhà tuyển dụng hàng đầu.</p>
+        <a href="/register" class="btn">Đăng ký ngay</a>
+        <a href="/login/candidate" class="btn">Đăng nhập</a>
+    </div>
+
+    <div class="features">
+        <div class="feature">
+            <h3><i class="fas fa-briefcase"></i>Cơ hội việc làm đa dạng</h3>
+            <p>Khám phá hàng ngàn công việc từ các ngành nghề khác nhau phù hợp với kỹ năng và kinh nghiệm của bạn.</p>
+        </div>
+        <div class="feature">
+            <h3><i class="fas fa-handshake"></i>Kết nối với nhà tuyển dụng uy tín</h3>
+            <p>Kết nối với các công ty hàng đầu và tìm kiếm cơ hội phát triển sự nghiệp trong môi trường chuyên nghiệp.</p>
+        </div>
+        <div class="feature">
+            <h3><i class="fas fa-headset"></i>Hỗ trợ tư vấn nghề nghiệp</h3>
+            <p>Nhận được sự hỗ trợ và tư vấn từ các chuyên gia để định hướng và phát triển sự nghiệp của bạn.</p>
+        </div>
+    </div>
+
+    <div class="articles">
+        <h2>Bài Viết Hữu Ích</h2>
+        <div class="article-list">
+            <div class="article-card">
+                <a href="https://nghenghiep.vieclam24h.vn/la-ban-su-nghiep/6-buoc-giup-ban-tiet-kiem-thoi-gian-khi-tim-viec-2/?utm_source=vieclam24h.vn&utm_medium=referral&utm_campaign=site-vieclam24h.vn&utm_content=home-page&_gl=1*418t4v*_gcl_au*MTE3Mzg2MjAyLjE3Mzg1NjYzODQ.*_ga*NjY2MjM3MjQzLjE3Mzg1NjYzODQ.*_ga_1QF2GYW1WQ*MTczODc0MzY2OC4zLjEuMTczODc0NDEzMS41MC4wLjEyMzg0NTQxNDA." target="_blank">Cách Chuẩn Bị Cho Buổi Phỏng Vấn Hoàn Hảo</a>
+            </div>
+            <div class="article-card">
+                <a href="https://thuvienphapluat.vn/lao-dong-tien-luong/kinh-nghiem-tim-viec-lam-ma-khong-phai-ai-cung-biet-cu-the-ra-sao-8458.html" target="_blank">Kinh Nghiệm Tìm Việc Làm</a>
+            </div>
+            <div class="article-card">
+                <a href="https://www.topcv.vn/huong-dan-viet-cv-chi-tiet-theo-nganh" target="_blank">Mẹo Viết CV Gây Ấn Tượng</a>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    © 2025 Trang Web tuyển dụng ứng viên. Mọi quyền được bảo lưu.
+</footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chủ Tìm Việc</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Thêm Font Awesome cho icon -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a.logo {
+            font-size: 26px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin-left: 25px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        nav ul li a:hover {
+            color: #f8d210;
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 123, 255, 0.8), rgba(0, 123, 255, 0.8)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            color: #fff;
+            padding: 60px 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: 40px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin: 15px 0 25px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 0 15px;
+            padding: 12px 25px;
+            background-color: #f8d210;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            background-color: #e6c20f;
+            transform: translateY(-3px);
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+
+        .feature {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            margin: 15px;
+            padding: 25px;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature h3 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #007bff;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature h3 i {
+            margin-right: 10px;
+            color: #f8d210;
+        }
+
+        .feature p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        .articles {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .articles h2 {
+            font-size: 32px;
+            color: #007bff;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .articles h2::after {
+            content: '';
+            width: 50px;
+            height: 3px;
+            background-color: #f8d210;
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .article-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .article-card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            padding: 25px;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .article-card a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .article-card a:hover {
+            color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .feature, .article-card {
+                width: 80%;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <a href="/homeCandidate" class="logo">Trang Chủ</a>
+        <ul>
+            <li><a href="/jobs">Công việc</a></li>
+            <li><a href="/homeCompany">Bạn là nhà tuyển dụng?</a></li>
+        </ul>
+    </nav>
+</header>
+<div class="container">
+    <div class="hero">
+        <h1>Chào mừng đến với Trang Web Ứng Viên</h1>
+        <p>Tìm kiếm công việc phù hợp và kết nối với nhà tuyển dụng hàng đầu.</p>
+        <a href="/register" class="btn">Đăng ký ngay</a>
+        <a href="/login/candidate" class="btn">Đăng nhập</a>
+    </div>
+
+    <div class="features">
+        <div class="feature">
+            <h3><i class="fas fa-briefcase"></i>Cơ hội việc làm đa dạng</h3>
+            <p>Khám phá hàng ngàn công việc từ các ngành nghề khác nhau phù hợp với kỹ năng và kinh nghiệm của bạn.</p>
+        </div>
+        <div class="feature">
+            <h3><i class="fas fa-handshake"></i>Kết nối với nhà tuyển dụng uy tín</h3>
+            <p>Kết nối với các công ty hàng đầu và tìm kiếm cơ hội phát triển sự nghiệp trong môi trường chuyên nghiệp.</p>
+        </div>
+        <div class="feature">
+            <h3><i class="fas fa-headset"></i>Hỗ trợ tư vấn nghề nghiệp</h3>
+            <p>Nhận được sự hỗ trợ và tư vấn từ các chuyên gia để định hướng và phát triển sự nghiệp của bạn.</p>
+        </div>
+    </div>
+
+    <div class="articles">
+        <h2>Bài Viết Hữu Ích</h2>
+        <div class="article-list">
+            <div class="article-card">
+                <a href="https://nghenghiep.vieclam24h.vn/la-ban-su-nghiep/6-buoc-giup-ban-tiet-kiem-thoi-gian-khi-tim-viec-2/?utm_source=vieclam24h.vn&utm_medium=referral&utm_campaign=site-vieclam24h.vn&utm_content=home-page&_gl=1*418t4v*_gcl_au*MTE3Mzg2MjAyLjE3Mzg1NjYzODQ.*_ga*NjY2MjM3MjQzLjE3Mzg1NjYzODQ.*_ga_1QF2GYW1WQ*MTczODc0MzY2OC4zLjEuMTczODc0NDEzMS41MC4wLjEyMzg0NTQxNDA." target="_blank">Cách Chuẩn Bị Cho Buổi Phỏng Vấn Hoàn Hảo</a>
+            </div>
+            <div class="article-card">
+                <a href="https://thuvienphapluat.vn/lao-dong-tien-luong/kinh-nghiem-tim-viec-lam-ma-khong-phai-ai-cung-biet-cu-the-ra-sao-8458.html" target="_blank">Kinh Nghiệm Tìm Việc Làm</a>
+            </div>
+            <div class="article-card">
+                <a href="https://www.topcv.vn/huong-dan-viet-cv-chi-tiet-theo-nganh" target="_blank">Mẹo Viết CV Gây Ấn Tượng</a>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    © 2025 Trang Web tuyển dụng ứng viên. Mọi quyền được bảo lưu.
+</footer>
+</body>
+</html>
