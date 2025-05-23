@@ -2,18 +2,15 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giao Diện Sidebar</title>
+    <title>Cập Nhật Thông Tin Cá Nhân</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
             display: flex;
             background-color: #f4f4f9;
         }
 
-        /* Header */
         header {
             background-color: #007bff;
             color: white;
@@ -32,14 +29,11 @@
             color: white;
             padding: 10px 20px;
             border: none;
-            cursor: pointer;
             font-size: 18px;
-            text-align: center;
-            text-decoration: none;
             border-radius: 5px;
+            cursor: pointer;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 250px;
             background-color: white;
@@ -59,7 +53,6 @@
             display: block;
             font-size: 16px;
             border-left: 5px solid transparent;
-            position: relative;
         }
 
         .sidebar a:hover {
@@ -80,7 +73,6 @@
             display: block;
         }
 
-        /* Main Content */
         .main-content {
             margin-left: 250px;
             padding: 90px 30px;
@@ -91,8 +83,7 @@
             color: #007bff;
         }
 
-        /* Form Styling */
-        .form-container {
+        form {
             background-color: white;
             padding: 25px;
             border-radius: 10px;
@@ -100,97 +91,114 @@
             max-width: 700px;
         }
 
-        .form-container h3 {
-            color: #007bff;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
+        label {
             display: block;
-            color: #4e73df;
+            margin-top: 15px;
             font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 5px;
         }
 
-        .form-group input,
-        .form-group textarea {
+        input, textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ddd;
+            margin-top: 5px;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 14px;
-            color: #333;
+            font-size: 16px;
         }
 
-        .form-group textarea {
-            resize: vertical;
-            height: 100px;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-        }
-
-        .submit-button {
+        button {
             background-color: #007bff;
             color: white;
             border: none;
             padding: 12px 20px;
             font-size: 16px;
             border-radius: 5px;
-            cursor: pointer;
             margin-top: 20px;
+            cursor: pointer;
         }
 
-        .submit-button:hover {
+        button:hover {
             background-color: #0056b3;
         }
 
         .error-message {
-            color: #dc3545;
+            color: red;
             text-align: center;
             margin-bottom: 20px;
-            font-size: 14px;
-            background-color: #f8d7da;
-            padding: 10px;
-            border-radius: 5px;
         }
 
-        /* Responsive Design */
+        .skills-section {
+            margin-top: 20px;
+        }
+
+        .skills-section h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .skills ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .skills li {
+            background-color: #e9ecef;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 6px;
+        }
+
         @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-            .main-content {
-                margin-left: 0;
-                padding: 80px 20px;
-            }
-            .form-container {
-                max-width: 100%;
-            }
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 20px; }
         }
     </style>
 </head>
 <body>
 
-<!-- Header -->
-<header>
-    <button class="home-button" onclick="goHome()">Trang Chủ</button>
+<header style="
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0080ff;
+  color: white;
+  padding: 7px 24px 7px 18px;  /* giảm padding */
+  font-size: 17px;             /* giảm font */
+  border-radius: 16px 16px 0 0;
+  height: 48px;                 /* thu nhỏ chiều cao */
+  box-sizing: border-box;
+">
+    <div style="font-weight: bold;">Trang Chủ</div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-weight: bold; white-space: nowrap;" th:text="${candidate.fullName}">Tên Ứng Viên</div>
+        <button onclick="logout()" style="
+      display: flex; align-items: center;
+      background: #fff;
+      color: #0080ff;
+      font-weight: 600;
+      border: none;
+      border-radius: 25px;
+      padding: 5px 15px;
+      margin-top: 0px;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+      transition: background 0.13s;
+      white-space: nowrap;
+    ">
+            <svg width="18" height="18" fill="currentColor" style="margin-right:5px;"><path d="M6 3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V4H8v14h6v-4a1 1 0 1 1 2 0v5a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3Zm12.707 7.707a1 1 0 0 0-1.414-1.414l-3 3a1 1 0 0 0 0 1.414l3 3a1 1 0 1 0 1.414-1.414L17.414 13H12a1 1 0 1 0 0 2h5.414l-1.707 1.707Z"/></svg>
+            Đăng xuất
+        </button>
+    </div>
 </header>
+
+
 
 <!-- Sidebar -->
 <div class="sidebar">
     <a href="javascript:void(0);" onclick="toggleSubMenu('submenu1')">Quản lý tài khoản</a>
     <div id="submenu1" class="submenu">
-        <a href="/change-password">Tài khoản của bạn</a>
+        <a href="#">Tài khoản của bạn</a>
     </div>
 
     <a href="javascript:void(0);" onclick="toggleSubMenu('submenu2')">Quản lý hồ sơ</a>
@@ -222,62 +230,49 @@
 
 <!-- Main Content -->
 <div class="main-content">
-    <h2>Cập Nhật Thông Tin Cá Nhân</h2>
-
+    <!-- Hiển thị thông báo lỗi nếu candidate là null -->
     <div class="error-message" th:if="${candidate == null}">
-        Không tìm thấy thông tin ứng viên. Vui lòng đăng nhập lại.
+        Lỗi: Không tìm thấy thông tin ứng viên. Vui lòng đăng nhập lại.
     </div>
 
-    <div class="form-container">
-        <form th:action="@{/candidates/update/{id}(id=${candidate.canId})}"
-              th:object="${candidate}" method="post">
-            <div class="form-group">
-                <label for="fullName">Họ và tên:</label>
-                <input type="text" id="fullName" th:field="*{fullName}" required>
-            </div>
+    <!-- Hiển thị form nếu candidate không null -->
+    <div th:if="${candidate != null}" th:object="${candidate}">
+        <h2>Cập Nhật Thông Tin Cá Nhân</h2>
 
-            <div class="form-group">
-                <label for="dob">Ngày sinh:</label>
-                <input type="date" id="dob" th:field="*{dob}" required>
-            </div>
+        <form th:action="@{/candidates/update/{id}(id=${candidate.canId})}" th:object="${candidate}" method="post">
 
-            <div class="form-group">
-                <label for="phone">Số điện thoại:</label>
-                <input type="text" id="phone" th:field="*{phone}" required>
-            </div>
+        <label for="fullNameField">Họ và tên:</label>
+            <input type="text" id="fullNameField" th:field="*{fullName}" required>
 
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" th:field="*{email}" required>
-            </div>
+            <label for="dobField">Ngày sinh:</label>
+            <input type="date" id="dobField" th:field="*{dob}" required>
 
-            <div class="form-group">
-                <label for="summary">Tóm tắt:</label>
-                <textarea id="summary" th:field="*{summary}" rows="4" placeholder="Giới thiệu về bạn..."></textarea>
-            </div>
+            <label for="addressNumberField">Số nhà:</label>
+            <input type="text" id="addressNumberField" th:field="*{address.number}" required>
 
-            <h3>Địa chỉ</h3>
-            <div class="form-group">
-                <label for="street">Đường:</label>
-                <input type="text" id="street" th:field="*{address.street}" required>
-            </div>
+            <label for="addressStreetField">Đường:</label>
+            <input type="text" id="addressStreetField" th:field="*{address.street}" required>
 
-            <div class="form-group">
-                <label for="city">Thành phố:</label>
-                <input type="text" id="city" th:field="*{address.city}" required>
-            </div>
+            <label for="addressCityField">Thành phố:</label>
+            <input type="text" id="addressCityField" th:field="*{address.city}" required>
 
-            <div class="form-group">
-                <label for="zipcode">Mã bưu điện:</label>
-                <input type="text" id="zipcode" th:field="*{address.zipcode}" required>
-            </div>
+            <label for="addressZipcodeField">Mã bưu điện:</label>
+            <input type="text" id="addressZipcodeField" th:field="*{address.zipcode}" required>
 
-            <div class="form-group">
-                <label for="country">Quốc gia:</label>
-                <input type="text" id="country" th:field="*{address.country}" required>
-            </div>
+            <label for="addressCountryField">Quốc gia:</label>
+            <input type="text" id="addressCountryField" th:field="*{address.country}" placeholder="Quốc gia" required>
 
-            <button type="submit" class="submit-button">Lưu thay đổi</button>
+
+            <label for="phoneField">Số điện thoại:</label>
+            <input type="text" id="phoneField" th:field="*{phone}" required>
+
+            <label for="emailField">Email:</label>
+            <input type="email" id="emailField" th:field="*{email}" required>
+
+            <label for="summaryField">Tóm tắt:</label>
+            <textarea id="summaryField" th:field="*{summary}" rows="4"></textarea>
+
+            <button type="submit">Lưu thay đổi</button>
         </form>
     </div>
 </div>
@@ -287,9 +282,14 @@
         window.location.href = "/dashboardCandidate";
     }
 
-    function toggleSubMenu(submenuId) {
-        const submenu = document.getElementById(submenuId);
+    function toggleSubMenu(id) {
+        const submenu = document.getElementById(id);
         submenu.classList.toggle("active");
+        submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+    }
+
+    function logout() {
+        window.location.href = "/";
     }
 </script>
 
