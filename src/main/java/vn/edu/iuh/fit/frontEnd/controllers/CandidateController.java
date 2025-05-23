@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.iuh.fit.backEnd.models.Candidate;
 import vn.edu.iuh.fit.backEnd.services.CandidateService;
 import vn.edu.iuh.fit.backEnd.services.JobRecommendationService;
@@ -45,14 +46,9 @@ public class CandidateController {
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
         Candidate candidate = candidateService.getCandidateById(id);
         model.addAttribute("candidate", candidate);
-        return "update-candidate";
+        return "uupdate-candidate";
     }
 
-    @PostMapping("/update/{id}")
-    public String updateCandidate(@PathVariable("id") long id, @ModelAttribute Candidate candidate) {
-        candidateService.updateCandidate(id, candidate);
-        return "redirect:/candidates";
-    }
 
     @GetMapping("/delete/{id}")
     public String deleteCandidate(@PathVariable("id") long id) {
@@ -69,5 +65,56 @@ public class CandidateController {
     public String showSkillRecommendations(@PathVariable("id") long id, Model model) {
         model.addAttribute("skills", skillService.recommendSkillsForCandidate(id));
         return "skill-recommendations";
+    }
+    @GetMapping("/profile/{id}")
+    public String viewProfile(@PathVariable("id") Long id, Model model) {
+        Candidate candidate = candidateService.getCandidateById(id);
+        model.addAttribute("candidate", candidate);
+        return "TrangHoSoNguoiDung";
+    }
+
+
+    @PostMapping("/change-password/{id}")
+    public String changePassword(
+            @PathVariable("id") Long id,
+            @RequestParam("oldPassword") String oldPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+        Candidate candidate = candidateService.getCandidateById(id);
+        if (candidate == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy tài khoản.");
+            return "redirect:/candidates/profile/" + id;
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu xác nhận không khớp.");
+            return "redirect:/candidates/profile/" + id;
+        }
+        if (!candidateService.checkPassword(candidate, oldPassword)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu cũ không đúng.");
+            return "redirect:/candidates/profile/" + id;
+        }
+        candidateService.updatePassword(candidate, newPassword);
+        redirectAttributes.addFlashAttribute("successMessage", "Đổi mật khẩu thành công!");
+        return "redirect:/candidates/profile/" + id;
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateCandidate(@PathVariable("id") Long id, @ModelAttribute Candidate candidate, RedirectAttributes ra) {
+        candidateService.updateCandidate(id, candidate);
+        ra.addFlashAttribute("successMessage", "Cập nhật thành công!");
+        // Nếu dùng id:
+        return "redirect:/candidates/profile/" + id;
+
+    }
+
+    @GetMapping("/hoso-cua-ban/{id}")
+    public String userProfileById(@PathVariable("id") Long id, Model model) {
+        Candidate candidate = candidateService.getCandidateById(id);
+        model.addAttribute("candidate", candidate);
+        model.addAttribute("candidateSkills", candidate.getCandidateSkills());
+        return "ho-so-cua-ban";
     }
 }

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Ứng Viên</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #007bff;
+            --light-bg: #f4f6f8;
+            --white: #fff;
+            --text: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--light-bg);
+            display: flex;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .user-info a {
+            color: white;
+            margin-left: 20px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 220px;
+            height: 100vh;
+            background-color: var(--white);
+            padding: 20px 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            transition: 0.2s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .main-content {
+            margin-left: 220px;
+            padding: 90px 30px 30px;
+            width: 100%;
+        }
+
+        .job-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .job-card {
+            flex: 1 1 calc(33% - 20px);
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .job-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .job-card p {
+            margin: 6px 0;
+            font-size: 14px;
+            color: #444;
+        }
+
+        .job-details {
+            display: none;
+            margin-top: 40px;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .job-details h3 {
+            color: var(--primary);
+        }
+
+        .job-details p {
+            margin: 8px 0;
+        }
+
+        .job-details ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .job-details ul li {
+            color: #555;
+        }
+
+        .apply-btn {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .apply-btn:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 992px) {
+            .job-card {
+                flex: 1 1 100%;
+            }
+
+            .main-content {
+                padding: 80px 15px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header style="position: fixed; top: 0; left: 0; width: 100%; height: 60px; background-color: #007bff; color: white; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+    <div><strong>Trang Chủ</strong></div>
+    <div class="user-info" style="display: flex; align-items: center; gap: 28px;">
+        <a th:href="@{/tranghosonguoidung}" th:text="${loggedInCandidate.fullName}" style="color: white; font-weight: bold; text-decoration: none;"></a>
+        <a href="/logout"
+           style="display: flex; align-items: center; background: #fff; color: #007bff; font-weight: bold; padding: 5px 20px; border-radius: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); border: 2px solid #fff; text-decoration: none; font-size: 16px; margin-left: 0; transition: background 0.2s, color 0.2s; margin-right: 35px">
+            <i class="fas fa-sign-out-alt" style="margin-right: 10px; font-size: 18px;"></i> Đăng xuất
+        </a>
+    </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="main-content">
+    <h2>Danh sách công việc</h2>
+    <div class="job-list">
+        <div class="job-card" th:each="job : ${jobs}" th:onclick="'showJobDetail(' + ${job.jobId} + ')'">
+            <h3 th:text="${job.jobName}">Tên công việc</h3>
+            <p><strong>Công ty:</strong> <span th:text="${job.company.compName}">Tên công ty</span></p>
+            <p><strong>Mô tả:</strong> <span th:text="${job.jobDesc}">Mô tả</span></p>
+        </div>
+    </div>
+
+    <!-- Chi tiết công việc -->
+    <div class="job-details" id="jobDetails">
+        <h3 id="jobTitle">Tên công việc</h3>
+        <p><strong>Mô tả:</strong> <span id="jobDesc"></span></p>
+        <p><strong>Công ty:</strong> <span id="jobCompany"></span></p>
+        <p><strong>Email:</strong> <span id="jobEmail"></span></p>
+        <p><strong>Kỹ năng:</strong></p>
+        <ul id="jobSkills"></ul>
+        <button class="apply-btn">Nộp hồ sơ</button>
+    </div>
+</div>
+
+<!-- Render job data vào JavaScript bằng Thymeleaf -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const jobData = /*[[${jobs}]]*/ [];
+    function showJobDetail(jobId) {
+        const job = jobData.find(j => j.jobId === jobId);
+        if (!job) return;
+
+        document.getElementById('jobTitle').innerText = job.jobName;
+        document.getElementById('jobDesc').innerText = job.jobDesc;
+        document.getElementById('jobCompany').innerText = job.company.compName;
+        document.getElementById('jobEmail').innerText = job.company.email;
+
+        const skillsList = document.getElementById('jobSkills');
+        skillsList.innerHTML = '';
+        if (job.skills) {
+            job.skills.forEach(skill => {
+                const li = document.createElement('li');
+                li.textContent = skill.skillName;
+                skillsList.appendChild(li);
+            });
+        }
+
+        document.getElementById('jobDetails').style.display = 'block';
+        document.getElementById('jobDetails').scrollIntoView({ behavior: 'smooth' });
+    }
+    /*]]>*/
+</script>
+
+</body>
+</html>
