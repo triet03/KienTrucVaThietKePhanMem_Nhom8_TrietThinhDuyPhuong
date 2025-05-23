@@ -32,19 +32,27 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
-//for country code
+    // for country code
     implementation 'com.neovisionaries:nv-i18n:1.29'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-//For database REST
+    // For database REST
     implementation 'org.springframework.data:spring-data-rest-core:4.1.4'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
-
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// Thêm vào cuối file để xử lý duplicate jar khi build
+tasks.withType(Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType(org.springframework.boot.gradle.tasks.bundling.BootJar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
