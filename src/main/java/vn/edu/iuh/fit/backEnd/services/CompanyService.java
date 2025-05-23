@@ -17,6 +17,9 @@ public class CompanyService {
 	public static void sendEmail(String email, String subject, String text) {
 		// Email logic here (hiện đang để trống)
 	}
+	public List<String> getAllCities() {
+		return companyRepository.findDistinctCities();
+	}
 
 	public List<Company> getAllCompanies() {
 		return companyRepository.findAll();

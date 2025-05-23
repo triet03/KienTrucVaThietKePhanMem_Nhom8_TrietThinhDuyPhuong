@@ -217,4 +217,18 @@ public class CandidateService {
         }
         return candidateRepository.findByEmail(email);
     }
+
+    @Transactional(readOnly = true)
+    public boolean checkPassword(Candidate candidate, String rawPassword) {
+        if (candidate == null || rawPassword == null) return false;
+        return rawPassword.equals(candidate.getPassword());
+    }
+
+    @Transactional
+    public void updatePassword(Candidate candidate, String newPassword) {
+        if (candidate == null || newPassword == null) return;
+        candidate.setPassword(newPassword);
+        candidateRepository.save(candidate);
+    }
+
 }

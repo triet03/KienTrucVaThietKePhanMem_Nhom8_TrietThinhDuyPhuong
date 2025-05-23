@@ -1,91 +1,4 @@
-//package vn.edu.iuh.fit.frontEnd.controllers;
-//
-//import jakarta.servlet.http.HttpSession;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.Model;
-//import org.springframework.web.bind.annotation.*;
-//
-//import vn.edu.iuh.fit.backEnd.models.Candidate;
-//import vn.edu.iuh.fit.backEnd.services.CandidateService;
-//
-//@Controller
-//public class CandidateLoginController {
-//
-//    @Autowired
-//    private CandidateService candidateService;
-//
-//    // Hiển thị form đăng ký
-//    @GetMapping("/register")
-//    public String showRegisterForm() {
-//        return "candidate_register"; // Trả về file candidate_register.html
-//    }
-//
-//    // Xử lý đăng ký người tìm việc
-//    @PostMapping("/register/candidate")
-//    public String processCandidateRegistration(@RequestParam String fullName,
-//                                               @RequestParam String email,
-//                                               @RequestParam String password) {
-//        Candidate candidate = new Candidate();
-//        candidate.setFullName(fullName);
-//        candidate.setEmail(email);
-//        candidate.setPassword(password); // có thể mã hóa nếu cần
-//
-//        candidateService.saveCandidate(candidate);
-//        System.out.println("✅ Người tìm việc đăng ký: " + fullName + " - " + email);
-//
-//        return "redirect:/login/candidate";
-//    }
-//
-//    // Hiển thị form đăng nhập
-//    @GetMapping("/login/candidate")
-//    public String showLoginForm() {
-//        return "candidate_login"; // Trả về file candidate_login.html
-//    }
-//
-////    // Xử lý đăng nhập người tìm việc
-////    @PostMapping("/login/candidate")
-////    public String processCandidateLogin(@RequestParam String email,
-////                                        @RequestParam String password,
-////                                        HttpSession session,
-////                                        Model model) {
-////        Candidate candidate = candidateService.findByEmail(email);
-////
-////        if (candidate != null && candidate.getPassword().equals(password)) {
-////            session.setAttribute("loggedInCandidate", candidate);
-////            System.out.println("✅ Đăng nhập thành công: " + email);
-////            return "redirect:/jobs"; // ✅ Chuyển đến trang job-list.html
-////        }
-////
-////        model.addAttribute("error", "Email hoặc mật khẩu không đúng.");
-////        return "candidate_login";
-////    }
-//
-//    // ✅ Xử lý đăng nhập và chuyển đến dashboard
-//    @PostMapping("/login/candidate")
-//    public String processCandidateLogin(@RequestParam String email,
-//                                        @RequestParam String password,
-//                                        HttpSession session,
-//                                        Model model) {
-//        Candidate candidate = candidateService.findByEmail(email);
-//
-//        if (candidate != null && candidate.getPassword().equals(password)) {
-//            session.setAttribute("loggedInCandidate", candidate);
-//            System.out.println("✅ Đăng nhập thành công: " + email);
-//            return "redirect:/dashboardCandidate"; // 🔄 CHUYỂN ĐẾN DASHBOARD
-//        }
-//
-//        model.addAttribute("error", "Email hoặc mật khẩu không đúng.");
-//        return "candidate_login";
-//    }
-//
-//    // ✅ Xử lý đăng xuất
-//    @GetMapping("/logout")
-//    public String logout(HttpSession session) {
-//        session.invalidate();
-//        return "redirect:/login/candidate";
-//    }
-//}
+
     package vn.edu.iuh.fit.frontEnd.controllers;
 
     import jakarta.servlet.http.HttpSession;
@@ -159,18 +72,18 @@
         }
 
         // -------------------- HIỂN THỊ DASHBOARD ỨNG VIÊN --------------------
-        @GetMapping("/dashboardCandidate")
-        public String showDashboardCandidate(HttpSession session, Model model) {
-            Candidate candidate = (Candidate) session.getAttribute("loggedInCandidate");
-            if (candidate == null) {
-                return "redirect:/login/candidate";
-            }
-
-            model.addAttribute("loggedInCandidate", candidate);
-          // model.addAttribute("jobs", jobService.findAll());
-
-            return "dashboard-candidate"; // Trả về file dashboard-candidate.html
-        }
+//        @GetMapping("/dashboardCandidate")
+//        public String showDashboardCandidate(HttpSession session, Model model) {
+//            Candidate candidate = (Candidate) session.getAttribute("loggedInCandidate");
+//            if (candidate == null) {
+//                return "redirect:/login/candidate";
+//            }
+//
+//            model.addAttribute("loggedInCandidate", candidate);
+//          // model.addAttribute("jobs", jobService.findAll());
+//
+//            return "dashboard-candidate"; // Trả về file dashboard-candidate.html
+//        }
 
 
         @GetMapping("/tranghosonguoidung")

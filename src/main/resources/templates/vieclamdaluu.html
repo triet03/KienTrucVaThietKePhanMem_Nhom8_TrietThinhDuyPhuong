@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hồ Sơ Của Bạn</title>
+    <style>
+        /* Header */
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 18px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .home-button {
+            background-color: #007bff; /* Màu nền giống màu header */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: white; /* Đổi màu nền thành trắng */
+            padding-top: 20px;
+            color: #4e73df;
+            height: 100vh;
+            position: fixed;
+            padding-left: 10px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Thêm bóng cho sidebar */
+            top: 60px; /* Đẩy sidebar xuống dưới header */
+        }
+
+        .sidebar a {
+            color: #4e73df;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+            border-left: 5px solid transparent;
+            position: relative;
+        }
+
+        .sidebar a:hover {
+            background-color: #f1f1f1;
+            border-left: 5px solid #007bff;
+        }
+
+        .sidebar .submenu a {
+            font-size: 14px;
+            padding-left: 30px;
+        }
+
+        .submenu {
+            display: none;
+        }
+
+        /* Accordion Effect */
+        .submenu.active {
+            display: block;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            flex-grow: 1;
+            margin-top: 80px; /* Đẩy nội dung chính xuống dưới header */
+        }
+
+        .main-content h2 {
+            color: #007bff;
+        }
+
+
+        .skills-section h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .skills li {
+            background-color: #e9ecef;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 6px;
+            display: block;
+        }
+        .job-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s ease;
+        }
+        .job-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+        .job-card h4 {
+            margin: 0;
+            font-size: 18px;
+            color: #007bff;
+        }
+        .job-card p {
+            margin: 5px 0;
+            color: #333;
+        }
+        .back-btn {
+            display: inline-block;
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <button class="home-button" onclick="goHome()">Trang Chủ</button>
+</header>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <a href="javascript:void(0);" onclick="toggleSubMenu('submenu1')">Quản lý tài khoản</a>
+    <div id="submenu1" class="submenu">
+        <a href="#">Tài khoản của bạn</a>
+    </div>
+
+    <a href="javascript:void(0);" onclick="toggleSubMenu('submenu2')">Quản lý hồ sơ</a>
+    <div id="submenu2" class="submenu">
+        <a href="/hoso-cua-ban">Hồ sơ của bạn</a>
+        <a href="/hoso-candidate">Cập nhật thông tin</a>
+    </div>
+
+    <a href="javascript:void(0);" onclick="toggleSubMenu('submenu3')">Quản lý việc làm</a>
+    <div id="submenu3" class="submenu">
+        <a href="#">Việc làm đã ứng tuyển</a>
+        <a href="/vieclamdaluu">Việc làm đã lưu</a>
+        <a href="#">Việc làm chờ ứng tuyển</a>
+        <a href="#">Thông báo việc làm</a>
+        <a href="/Timkiemvieclam">Tìm kiếm việc làm</a>
+
+    </div>
+
+    <a href="javascript:void(0);" onclick="toggleSubMenu('submenu4')">Nhà tuyển dụng bạn quan tâm</a>
+    <div id="submenu4" class="submenu">
+        <a href="#">Nhà tuyển dụng xem hồ sơ bạn</a>
+        <a href="#">Nhà tuyển dụng đang theo dõi</a>
+    </div>
+
+    <a href="javascript:void(0);" onclick="toggleSubMenu('submenu5')">Hỗ trợ và thông báo</a>
+    <div id="submenu5" class="submenu">
+        <a href="#">Việc làm 24h thông báo</a>
+        <a href="#">Hướng dẫn sử dụng</a>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <h2>Danh sách công việc đã lưu</h2>
+
+    <div th:if="${savedJobs == null or savedJobs.isEmpty()}" style="color: gray;">
+        Bạn chưa lưu công việc nào.
+    </div>
+
+    <div th:each="saved : ${savedJobs}" class="job-card">
+        <h4 th:text="${saved.job.jobName}">Tên công việc</h4>
+        <p><strong>Mô tả:</strong> <span th:text="${saved.job.jobDesc}">Mô tả công việc</span></p>
+        <p><strong>Lương:</strong> <span th:text="${saved.job.salary} + ' VNĐ'">Lương</span></p>
+        <p><strong>Địa chỉ:</strong>
+            <span th:text="${saved.job.company.address.street + ', ' + saved.job.company.address.city}">Địa chỉ</span>
+        </p>
+
+        <div style="margin-top: 15px;">
+            <!-- Nút xem chi tiết -->
+            <a th:href="@{'/jobs/' + ${saved.job.jobId}}"
+               style="background-color: #007bff; color: white; padding: 8px 16px; text-decoration: none; border-radius: 5px; margin-right: 10px;">
+                Xem chi tiết
+            </a>
+
+            <!-- Nút xóa -->
+            <form th:action="@{'/delete-saved/' + ${saved.id}}" method="post" style="display: inline;">
+                <button type="submit"
+                        style="background-color: #dc3545; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer;">
+                    Xoá
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <a href="/tranghosonguoidung" class="back-btn">← Quay lại Dashboard</a>
+</div>
+
+<script>
+    const input = document.getElementById('keywordInput');
+    const suggestionsBox = document.getElementById('suggestions');
+
+    input.addEventListener('input', function () {
+        const query = this.value.trim();
+        if (query.length < 2) {
+            suggestionsBox.innerHTML = '';
+            return;
+        }
+
+        fetch(`/Timkiemvieclam/suggestions?keyword=${encodeURIComponent(query)}`)
+            .then(response => {
+                if (!response.ok) throw new Error("Lỗi khi gọi API");
+                return response.json();
+            })
+            .then(data => {
+                suggestionsBox.innerHTML = '';
+                data.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    li.style.padding = '8px';
+                    li.style.cursor = 'pointer';
+                    li.onmouseover = () => li.style.backgroundColor = '#f1f1f1';
+                    li.onmouseout = () => li.style.backgroundColor = 'white';
+                    li.onclick = () => {
+                        input.value = item;
+                        suggestionsBox.innerHTML = '';
+                    };
+                    suggestionsBox.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Lỗi khi lấy gợi ý:', error);
+                suggestionsBox.innerHTML = '';
+            });
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!suggestionsBox.contains(e.target) && e.target !== input) {
+            suggestionsBox.innerHTML = '';
+        }
+    });
+
+    function toggleSubMenu(submenuId) {
+        const submenu = document.getElementById(submenuId);
+        submenu.classList.toggle('active');
+    }
+
+    function goHome() {
+        window.location.href = "/dashboardCandidate";
+    }
+</script>
+
+
+</body>
+</html>

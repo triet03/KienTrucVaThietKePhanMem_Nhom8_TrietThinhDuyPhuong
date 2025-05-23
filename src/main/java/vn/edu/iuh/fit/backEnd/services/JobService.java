@@ -65,4 +65,16 @@ public class JobService {
         Job job = getJobById(id);
         jobRepository.delete(job);
     }
+
+    public List<Job> searchJobs(String keyword, Integer minSalary, Integer maxSalary, String city) {
+        return jobRepository.searchJobs(keyword, minSalary, maxSalary, city);
+    }
+
+//    public List<String> findJobNamesByKeyword(String keyword) {
+//        return jobRepository.findJobNamesByKeyword("%" + keyword.toLowerCase() + "%");
+//    }
+
+    public List<String> findJobNamesByKeyword(String keyword) {
+        return jobRepository.findJobNamesByKeyword(keyword.toLowerCase());
+    }
 }

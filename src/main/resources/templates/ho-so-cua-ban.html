@@ -80,93 +80,182 @@
     /* Main Content */
     .main-content {
       margin-left: 250px;
-      padding: 30px;
-      flex-grow: 1;
-      margin-top: 80px; /* Đẩy nội dung chính xuống dưới header */
+      margin-top: 90px; /* Đẩy xuống dưới header */
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: calc(100vh - 90px);
+      background: #f4f7fa;
     }
 
-    .main-content h2 {
+    .profile-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 6px 24px 0 rgba(30,48,90,0.10);
+      padding: 36px 40px 32px 40px;
+      min-width: 420px;
+      max-width: 580px;
+      width: 100%;
+      margin-bottom: 36px;
+      position: relative;
+    }
+
+    .profile-card h2 {
       color: #007bff;
+      margin-bottom: 18px;
+      letter-spacing: 0.2px;
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: left;
     }
 
-    /* Styles cho thông tin cá nhân và kỹ năng */
     .info-row {
-      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
     }
 
     .label {
-      font-weight: bold;
-      display: inline-block;
-      width: 160px;
-      color: #333;
+      min-width: 130px;
+      font-weight: 600;
+      color: #3c4257;
+      opacity: 0.87;
+      font-size: 16px;
     }
 
     .value {
-      color: #555;
+      color: #495057;
+      font-size: 16px;
+      font-weight: 400;
     }
 
     .skills-section {
-      margin-top: 20px;
+      margin-top: 30px;
     }
 
     .skills-section h3 {
       color: #007bff;
       margin-bottom: 10px;
+      font-size: 1.15rem;
+      font-weight: 600;
     }
 
     .skills {
-      padding-left: 20px;
+      padding-left: 22px;
+      margin: 0;
     }
 
     .skills li {
-      background-color: #e9ecef;
-      padding: 8px 12px;
-      margin: 5px 0;
-      border-radius: 6px;
-      display: block;
+      background: #f1f5fa;
+      border-radius: 8px;
+      margin-bottom: 7px;
+      padding: 8px 14px;
+      font-size: 15px;
+      list-style: none;
     }
 
     .edit-button {
       background-color: #007bff;
       color: white;
-      padding: 10px 20px;
+      padding: 10px 26px;
       border: none;
       cursor: pointer;
       font-size: 16px;
-      border-radius: 5px;
-      margin-top: 15px;
-      display: inline-block;
+      border-radius: 6px;
+      margin-top: 16px;
+      font-weight: 600;
+      transition: background 0.15s;
+      box-shadow: 0 1px 6px 0 rgba(0,0,0,0.04);
+      display: block;
     }
 
     .edit-button:hover {
       background-color: #0056b3;
     }
 
-    .error-message {
-      color: red;
-      text-align: center;
-      margin-bottom: 20px;
+    .back-btn {
+      display: inline-block;
+      margin-top: 22px;
+      color: #007bff;
+      font-weight: 500;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: text-decoration 0.15s;
+      text-decoration: underline dotted;
     }
+
+    .error-message {
+      color: #ff2d55;
+      background: #fff6f6;
+      border: 1px solid #ffe6e6;
+      padding: 16px 0;
+      border-radius: 7px;
+      text-align: center;
+      margin-bottom: 28px;
+      font-size: 1.08rem;
+    }
+
   </style>
 </head>
 <body>
 
 <!-- Header -->
-<header>
-  <button class="home-button" onclick="goHome()">Trang Chủ</button>
+<!-- Header -->
+<header style="
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0080ff;
+  color: white;
+  padding: 7px 24px 7px 18px;  /* giảm padding */
+  font-size: 17px;             /* giảm font */
+  border-radius: 16px 16px 0 0;
+  height: 48px;                 /* thu nhỏ chiều cao */
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+">
+  <div style="font-weight: bold; cursor:pointer" onclick="goHome()">Trang Chủ</div>
+  <div style="display: flex; align-items: center; gap: 16px;">
+    <div style="font-weight: bold; white-space: nowrap;" th:text="${candidate.fullName}">Tên Ứng Viên</div>
+    <button onclick="logout()" style="
+      display: flex; align-items: center;
+      background: #fff;
+      color: #0080ff;
+      font-weight: 600;
+      border: none;
+      border-radius: 25px;
+      padding: 5px 15px;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+      transition: background 0.13s;
+      white-space: nowrap;
+    ">
+      <svg width="18" height="18" fill="currentColor" style="margin-right:5px;"><path d="M6 3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V4H8v14h6v-4a1 1 0 1 1 2 0v5a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3Zm12.707 7.707a1 1 0 0 0-1.414-1.414l-3 3a1 1 0 0 0 0 1.414l3 3a1 1 0 1 0 1.414-1.414L17.414 13H12a1 1 0 1 0 0 2h5.414l-1.707 1.707Z"/></svg>
+      Đăng xuất
+    </button>
+  </div>
 </header>
+
 
 <!-- Sidebar -->
 <div class="sidebar">
   <a href="javascript:void(0);" onclick="toggleSubMenu('submenu1')">Quản lý tài khoản</a>
   <div id="submenu1" class="submenu">
-    <a href="#">Tài khoản của bạn</a>
+    <a th:href="@{'/candidates/profile/' + ${candidate.canId}}">Tài khoản của bạn</a>
+
   </div>
 
   <a href="javascript:void(0);" onclick="toggleSubMenu('submenu2')">Quản lý hồ sơ</a>
   <div id="submenu2" class="submenu">
     <a href="/hoso-cua-ban">Hồ sơ của bạn</a>
-    <a href="/hoso-candidate">Cập nhật thông tin</a>
   </div>
 
   <a href="javascript:void(0);" onclick="toggleSubMenu('submenu3')">Quản lý việc làm</a>
@@ -194,60 +283,63 @@
 
 <!-- Main Content -->
 <div class="main-content">
-  <!-- Hiển thị thông báo lỗi nếu candidate là null -->
-  <div class="error-message" th:if="${candidate == null}">
-    Lỗi: Không tìm thấy thông tin ứng viên. Vui lòng đăng nhập lại.
+  <div class="profile-card">
+    <!-- Hiển thị thông báo lỗi nếu candidate là null -->
+    <div class="error-message" th:if="${candidate == null}">
+      Lỗi: Không tìm thấy thông tin ứng viên. Vui lòng đăng nhập lại.
+    </div>
+
+    <!-- Hiển thị thông tin ứng viên nếu candidate không null -->
+    <div th:if="${candidate != null}" th:object="${candidate}">
+      <h2>Hồ Sơ Cá Nhân</h2>
+
+      <div class="info-row">
+        <span class="label">Họ và tên:</span>
+        <span class="value" th:text="*{fullName} ?: 'Chưa cập nhật'">Họ tên</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Email:</span>
+        <span class="value" th:text="*{email} ?: 'Chưa cập nhật'">Email</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Số điện thoại:</span>
+        <span class="value" th:text="*{phone} ?: 'Chưa cập nhật'">Số điện thoại</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Ngày sinh:</span>
+        <span class="value" th:text="${#dates.format(candidate.dob, 'dd/MM/yyyy')} ?: 'Chưa cập nhật'">Ngày sinh</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Tóm tắt:</span>
+        <span class="value" th:text="*{summary} ?: 'Chưa cập nhật'">Tóm tắt</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Địa chỉ:</span>
+        <span class="value" th:text="${candidate.address != null} ? *{address.street + ', ' + address.city + ', ' + address.zipcode + ', ' + address.country} : 'Chưa cập nhật'">Địa chỉ đầy đủ</span>
+      </div>
+
+      <div class="skills-section">
+        <h3>Kỹ năng</h3>
+        <ul class="skills" th:if="${candidateSkills != null and not #lists.isEmpty(candidateSkills)}">
+          <li th:each="skill : ${candidateSkills}">
+            <span th:text="${skill.skill.name} + ' (Mức độ: ' + skill.skillLevel + ')'"></span>
+            <span th:if="${skill.moreInfos != null and not #strings.isEmpty(skill.moreInfos)}" th:text="' - ' + ${skill.moreInfos}"></span>
+          </li>
+        </ul>
+        <div th:unless="${candidateSkills != null and not #lists.isEmpty(candidateSkills)}" class="value">Chưa có kỹ năng nào được thêm.</div>
+        <button class="edit-button" onclick="window.location.href='/hoso-candidate'">Chỉnh sửa thông tin</button>
+      </div>
+    </div>
+
+    <a href="/tranghosonguoidung" class="back-btn">← Quay lại Dashboard</a>
   </div>
-
-  <!-- Hiển thị thông tin ứng viên nếu candidate không null -->
-  <div th:if="${candidate != null}" th:object="${candidate}">
-    <h2>Hồ Sơ Cá Nhân</h2>
-
-    <div class="info-row">
-      <span class="label">Họ và tên:</span>
-      <span class="value" th:text="*{fullName} ?: 'Chưa cập nhật'">Họ tên</span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">Email:</span>
-      <span class="value" th:text="*{email} ?: 'Chưa cập nhật'">Email</span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">Số điện thoại:</span>
-      <span class="value" th:text="*{phone} ?: 'Chưa cập nhật'">Số điện thoại</span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">Ngày sinh:</span>
-      <span class="value" th:text="${#dates.format(candidate.dob, 'dd/MM/yyyy')} ?: 'Chưa cập nhật'">Ngày sinh</span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">Tóm tắt:</span>
-      <span class="value" th:text="*{summary} ?: 'Chưa cập nhật'">Tóm tắt</span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">Địa chỉ:</span>
-      <span class="value" th:text="${candidate.address != null} ? *{address.street + ', ' + address.city + ', ' + address.zipcode + ', ' + address.country} : 'Chưa cập nhật'">Địa chỉ đầy đủ</span>
-    </div>
-
-    <div class="skills-section">
-      <h3>Kỹ năng</h3>
-      <ul class="skills" th:if="${candidateSkills != null and not #lists.isEmpty(candidateSkills)}">
-        <li th:each="skill : ${candidateSkills}">
-          <span th:text="${skill.skill.name} + ' (Mức độ: ' + skill.skillLevel + ')'"></span>
-          <span th:if="${skill.moreInfos != null and not #strings.isEmpty(skill.moreInfos)}" th:text="' - ' + ${skill.moreInfos}"></span>
-        </li>
-      </ul>
-      <div th:unless="${candidateSkills != null and not #lists.isEmpty(candidateSkills)}" class="value">Chưa có kỹ năng nào được thêm.</div>
-      <button class="edit-button" onclick="window.location.href='/hoso-candidate'">Chỉnh sửa thông tin</button>
-    </div>
-  </div>
-
-  <a href="/tranghosonguoidung" class="back-btn">← Quay lại Dashboard</a>
 </div>
+
 
 <script>
   function toggleSubMenu(submenuId) {
@@ -259,9 +351,11 @@
     }
   }
 
-  function goHome() {
-    window.location.href = "/tranghosonguoidung"; // Điều hướng về dashboard khi nhấn "Trang Chủ"
+
+  function logout() {
+    window.location.href = "/";
   }
+
 </script>
 
 </body>

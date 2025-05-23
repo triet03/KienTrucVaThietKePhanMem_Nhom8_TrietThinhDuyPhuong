@@ -156,41 +156,89 @@
                 padding: 80px 15px 30px;
             }
         }
+
+        .job-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        .job-card h4 {
+            color: #007bff;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .job-card p {
+            margin: 5px 0;
+            font-size: 15px;
+            color: #444;
+        }
+
+        .job-card a {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 12px;
+            transition: background-color 0.2s ease;
+        }
+
+        .job-card a:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
 
 <!-- Header -->
-<header>
-    <div><strong>Dashboard Ứng Viên</strong></div>
-    <div class="user-info">
-        <a th:href="@{/tranghosonguoidung}" th:text="${loggedInCandidate.fullName}">Tên ứng viên</a>
-        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+<header style="position: fixed; top: 0; left: 0; width: 100%; height: 60px; background-color: #007bff; color: white; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+    <div><strong>Trang Chủ</strong></div>
+    <div class="user-info" style="display: flex; align-items: center; gap: 28px;">
+        <a th:href="@{/tranghosonguoidung}" th:text="${loggedInCandidate.fullName}" style="color: white; font-weight: bold; text-decoration: none;"></a>
+        <a href="/logout"
+           style="display: flex; align-items: center; background: #fff; color: #007bff; font-weight: bold; padding: 5px 20px; border-radius: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); border: 2px solid #fff; text-decoration: none; font-size: 16px; margin-left: 0; transition: background 0.2s, color 0.2s; margin-right: 35px">
+            <i class="fas fa-sign-out-alt" style="margin-right: 10px; font-size: 18px;"></i> Đăng xuất
+        </a>
     </div>
 </header>
 
 
 <!-- Main Content -->
 <div class="main-content">
-    <h2>Danh sách công việc</h2>
-    <div class="job-list">
-        <div class="job-card" th:each="job : ${jobs}" th:onclick="'showJobDetail(' + ${job.jobId} + ')'">
-            <h3 th:text="${job.jobName}">Tên công việc</h3>
-            <p><strong>Công ty:</strong> <span th:text="${job.company.compName}">Tên công ty</span></p>
-            <p><strong>Mô tả:</strong> <span th:text="${job.jobDesc}">Mô tả</span></p>
-        </div>
-    </div>
+    <h2>Danh sách công việc đề xuất cho bạn</h2>
+    <th:block th:if="${#lists.isEmpty(recommendedJobs)}">
+        <p>Chưa có gợi ý nào phù hợp.</p>
+    </th:block>
 
-    <!-- Chi tiết công việc -->
-    <div class="job-details" id="jobDetails">
-        <h3 id="jobTitle">Tên công việc</h3>
-        <p><strong>Mô tả:</strong> <span id="jobDesc"></span></p>
-        <p><strong>Công ty:</strong> <span id="jobCompany"></span></p>
-        <p><strong>Email:</strong> <span id="jobEmail"></span></p>
-        <p><strong>Kỹ năng:</strong></p>
-        <ul id="jobSkills"></ul>
-        <button class="apply-btn">Nộp hồ sơ</button>
-    </div>
+    <th:block th:each="job : ${recommendedJobs}">
+        <!-- Hiển thị công việc -->
+        <div th:if="${recommendedJobs != null and !recommendedJobs.isEmpty()}">
+            <div th:each="job : ${recommendedJobs}" class="job-card">
+                <h4 th:text="${job.jobName}">Tên công việc</h4>
+                <p><strong>Mô tả:</strong> <span th:text="${job.jobDesc}">Mô tả công việc</span></p>
+                <p><strong>Lương:</strong> <span th:text="${job.salary} + ' VNĐ'">Lương</span></p>
+                <p th:if="${job.company != null and job.company.address != null}">
+                    <strong>Địa chỉ:</strong>
+                    <span th:text="${job.company.address.street + ', ' + job.company.address.city}">Địa chỉ</span>
+                </p>
+
+                <a th:href="@{'/jobs/' + ${job.jobId}}">Xem chi tiết</a>
+            </div>
+        </div>
+    </th:block>
+
 </div>
 
 <!-- Render job data vào JavaScript bằng Thymeleaf -->

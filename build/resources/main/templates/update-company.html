@@ -1,62 +1,336 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Chỉnh Sửa Công Ty</title>
+	<title>Chỉnh Sửa Ứng Viên</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f4;
+			margin: 0;
+			padding: 0;
+		}
+		header {
+			background-color: #007bff;
+			padding: 15px 0;
+			color: white;
+		}
+		nav {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 20px;
+		}
+		nav a {
+			color: white;
+			font-size: 18px;
+			text-decoration: none;
+		}
+		nav a:hover {
+			text-decoration: underline;
+		}
+		h1 {
+			text-align: center;
+			margin-top: 30px;
+			font-size: 36px;
+			color: #333;
+		}
+		form {
+			background-color: white;
+			max-width: 800px;
+			margin: 20px auto;
+			padding: 30px;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
+		label {
+			font-size: 18px;
+			margin-top: 10px;
+			display: block;
+			color: #333;
+		}
+		input[type="text"], input[type="email"], input[type="date"] {
+			width: 100%;
+			padding: 12px;
+			margin-top: 5px;
+			margin-bottom: 15px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			font-size: 16px;
+		}
+		button {
+			background-color: #28a745;
+			color: white;
+			padding: 12px 20px;
+			font-size: 18px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			width: 100%;
+		}
+		button:hover {
+			background-color: #218838;
+		}
+	</style>
 </head>
 <body>
-<header style="background-color: #f8f9fa; padding: 10px 0;">
-	<nav
-			style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-		<a href="/home"
-		   style="font-size: 24px; font-weight: bold; color: #007bff; text-decoration: none;">Trang
-			Chủ</a>
-		<ul
-				style="display: flex; list-style-type: none; margin: 0; padding: 0;">
-			<li style="margin: 0 15px;"><a href="/candidates"
-										   style="text-decoration: none; color: #333; font-size: 18px;">Ứng
-				viên</a></li>
-			<li style="margin: 0 15px;"><a href="/companies"
-										   style="text-decoration: none; color: #333; font-size: 18px;">Công
-				ty</a></li>
-			<li style="margin: 0 15px;"><a href="/jobs"
-										   style="text-decoration: none; color: #333; font-size: 18px;">Công
-				việc</a></li>
-			<li style="margin: 0 15px;"><a href="/skills"
-										   style="text-decoration: none; color: #333; font-size: 18px;">Kỹ
-				năng</a></li>
+
+<header>
+	<nav>
+		<a href="/home">Trang Chủ</a>
+		<ul style="display: flex; list-style-type: none; margin: 0; padding: 0;">
+			<li style="margin: 0 15px;"><a href="/candidates">Ứng viên</a></li>
+			<li style="margin: 0 15px;"><a href="/companies">Công ty</a></li>
+			<li style="margin: 0 15px;"><a href="/jobs">Công việc</a></li>
+			<li style="margin: 0 15px;"><a href="/skills">Kỹ năng</a></li>
 		</ul>
 	</nav>
 </header>
 
-<h1>Chỉnh Sửa Công Ty</h1>
+<h1>Chỉnh Sửa Ứng Viên</h1>
 
-<form th:action="@{/companies/update/{id}(id=${company.comId})}"
-	  th:object="${company}" method="post">
-	<label for="compName">Tên Công Ty:</label>
-	<input type="text" id="compName" th:field="*{compName}" required>
+<form th:action="@{/candidates/update/{id}(id=${candidate.canId})}" th:object="${candidate}" method="post">
+	<label for="fullName">Họ và tên:</label>
+	<input type="text" id="fullName" th:field="*{fullName}" required>
 
-	<label for="about">Mô Tả:</label>
-	<textarea id="about" th:field="*{about}" required></textarea>
+	<label for="dob">Ngày sinh:</label>
+	<input type="date" id="dob" th:field="*{dob}" required>
+
+	<label for="address">Địa chỉ:</label>
+	<input type="text" id="address" th:field="*{address.street}" required>
+	<input type="text" id="city" th:field="*{address.city}" required>
+	<input type="text" id="zipcode" th:field="*{address.zipcode}" required>
+	<input type="text" id="country" th:field="*{address.country}" required>
+
+	<label for="phone">Số điện thoại:</label>
+	<input type="text" id="phone" th:field="*{phone}" required>
 
 	<label for="email">Email:</label>
 	<input type="email" id="email" th:field="*{email}" required>
 
-	<label for="phone">Số Điện Thoại:</label>
-	<input type="text" id="phone" th:field="*{phone}" required>
-
-	<label for="webUrl">Website:</label>
-	<input type="text" id="webUrl" th:field="*{webUrl}" required>
-
-	<label for="address">Địa Chỉ:</label>
-	<input type="text" id="address" th:field="*{address.street}" required>
-
-	<input type="text" id="city" th:field="*{address.city}" required>
-
-	<input type="text" id="zipcode" th:field="*{address.zipcode}" required>
-
-	<input type="text" id="country" th:field="*{address.country}" required>
-
 	<button type="submit">Lưu</button>
 </form>
+
 </body>
 </html>
+<!--<!DOCTYPE html>-->
+<!--<html lang="vi" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--	<meta charset="UTF-8">-->
+<!--	<title>Cập Nhật Hồ Sơ</title>-->
+<!--	<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--	<style>-->
+<!--		body {-->
+<!--			font-family: Arial, sans-serif;-->
+<!--			margin: 0;-->
+<!--			display: flex;-->
+<!--			background-color: #f4f4f9;-->
+<!--		}-->
+
+<!--		header {-->
+<!--			background-color: #007bff;-->
+<!--			color: white;-->
+<!--			padding: 15px 20px;-->
+<!--			font-size: 18px;-->
+<!--			width: 100%;-->
+<!--			position: fixed;-->
+<!--			top: 0;-->
+<!--			left: 0;-->
+<!--			z-index: 1000;-->
+<!--		}-->
+
+<!--		.home-button {-->
+<!--			background-color: #007bff;-->
+<!--			color: white;-->
+<!--			padding: 10px 20px;-->
+<!--			border: none;-->
+<!--			font-size: 18px;-->
+<!--			border-radius: 5px;-->
+<!--			cursor: pointer;-->
+<!--		}-->
+
+<!--		.sidebar {-->
+<!--			width: 250px;-->
+<!--			background-color: white;-->
+<!--			padding-top: 20px;-->
+<!--			color: #4e73df;-->
+<!--			height: 100vh;-->
+<!--			position: fixed;-->
+<!--			padding-left: 10px;-->
+<!--			box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);-->
+<!--			top: 60px;-->
+<!--		}-->
+
+<!--		.sidebar a {-->
+<!--			color: #4e73df;-->
+<!--			padding: 10px;-->
+<!--			text-decoration: none;-->
+<!--			display: block;-->
+<!--			font-size: 16px;-->
+<!--			border-left: 5px solid transparent;-->
+<!--		}-->
+
+<!--		.sidebar a:hover {-->
+<!--			background-color: #f1f1f1;-->
+<!--			border-left: 5px solid #007bff;-->
+<!--		}-->
+
+<!--		.sidebar .submenu a {-->
+<!--			font-size: 14px;-->
+<!--			padding-left: 30px;-->
+<!--		}-->
+
+<!--		.submenu {-->
+<!--			display: none;-->
+<!--		}-->
+
+<!--		.main-content {-->
+<!--			margin-left: 250px;-->
+<!--			padding: 90px 30px;-->
+<!--			flex-grow: 1;-->
+<!--		}-->
+
+<!--		h2 {-->
+<!--			color: #007bff;-->
+<!--		}-->
+
+<!--		form {-->
+<!--			background-color: white;-->
+<!--			padding: 25px;-->
+<!--			border-radius: 10px;-->
+<!--			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);-->
+<!--			max-width: 700px;-->
+<!--		}-->
+
+<!--		label {-->
+<!--			display: block;-->
+<!--			margin-top: 15px;-->
+<!--			font-weight: bold;-->
+<!--		}-->
+
+<!--		input, textarea {-->
+<!--			width: 100%;-->
+<!--			padding: 10px;-->
+<!--			margin-top: 5px;-->
+<!--			border: 1px solid #ccc;-->
+<!--			border-radius: 5px;-->
+<!--			font-size: 16px;-->
+<!--		}-->
+
+<!--		button {-->
+<!--			background-color: #007bff;-->
+<!--			color: white;-->
+<!--			border: none;-->
+<!--			padding: 12px 20px;-->
+<!--			font-size: 16px;-->
+<!--			border-radius: 5px;-->
+<!--			margin-top: 20px;-->
+<!--			cursor: pointer;-->
+<!--		}-->
+
+<!--		button:hover {-->
+<!--			background-color: #0056b3;-->
+<!--		}-->
+
+<!--		.avatar-preview {-->
+<!--			width: 120px;-->
+<!--			height: 120px;-->
+<!--			border-radius: 50%;-->
+<!--			object-fit: cover;-->
+<!--			border: 3px solid #007bff;-->
+<!--			margin-top: 10px;-->
+<!--			margin-bottom: 10px;-->
+<!--		}-->
+
+<!--		@media (max-width: 768px) {-->
+<!--			.sidebar { display: none; }-->
+<!--			.main-content { margin-left: 0; padding: 20px; }-->
+<!--		}-->
+<!--	</style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<header>-->
+<!--	<button class="home-button" onclick="goHome()">Trang Chủ</button>-->
+<!--</header>-->
+
+<!--&lt;!&ndash; Sidebar &ndash;&gt;-->
+<!--<div class="sidebar">-->
+<!--	<a href="javascript:void(0);" onclick="toggleSubMenu('submenu1')">Quản lý tài khoản</a>-->
+<!--	<div id="submenu1" class="submenu">-->
+<!--		<a href="#">Tài khoản của bạn</a>-->
+<!--	</div>-->
+
+<!--	<a href="javascript:void(0);" onclick="toggleSubMenu('submenu2')">Quản lý hồ sơ</a>-->
+<!--	<div id="submenu2" class="submenu">-->
+<!--		<a href="#">Hồ sơ của bạn</a>-->
+<!--		<a href="/hoso-candidate">Cập nhật thông tin</a>-->
+<!--	</div>-->
+
+<!--	<a href="javascript:void(0);" onclick="toggleSubMenu('submenu3')">Quản lý việc làm</a>-->
+<!--	<div id="submenu3" class="submenu">-->
+<!--		<a href="#">Việc làm đã ứng tuyển</a>-->
+<!--		<a href="#">Việc làm đã lưu</a>-->
+<!--		<a href="#">Việc làm chờ ứng tuyển</a>-->
+<!--		<a href="#">Thông báo việc làm</a>-->
+<!--	</div>-->
+
+<!--	<a href="javascript:void(0);" onclick="toggleSubMenu('submenu4')">Nhà tuyển dụng bạn quan tâm</a>-->
+<!--	<div id="submenu4" class="submenu">-->
+<!--		<a href="#">Nhà tuyển dụng xem hồ sơ bạn</a>-->
+<!--		<a href="#">Nhà tuyển dụng đang theo dõi</a>-->
+<!--	</div>-->
+
+<!--	<a href="javascript:void(0);" onclick="toggleSubMenu('submenu5')">Hỗ trợ và thông báo</a>-->
+<!--	<div id="submenu5" class="submenu">-->
+<!--		<a href="#">Việc làm 24h thông báo</a>-->
+<!--		<a href="#">Hướng dẫn sử dụng</a>-->
+<!--	</div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Main Content &ndash;&gt;-->
+<!--<div class="main-content">-->
+<!--	<h2>Cập Nhật Thông Tin Cá Nhân</h2>-->
+
+<!--	<form th:action="@{/candidates/update}" method="post" enctype="multipart/form-data" th:object="${candidate}">-->
+<!--		<label>Ảnh đại diện:</label>-->
+<!--		<img class="avatar-preview"-->
+<!--			 th:src="${candidate.avatar != null} ? @{/uploads/{img}(img=${candidate.avatar})} : @{/images/default-avatar.png}"-->
+<!--			 alt="avatar">-->
+<!--		<input type="file" name="avatarFile" accept="image/*">-->
+
+<!--		<label>Họ và tên:</label>-->
+<!--		<input type="text" th:field="*{fullName}" placeholder="Họ tên">-->
+
+<!--		<label>Email:</label>-->
+<!--		<input type="email" th:field="*{email}" placeholder="Email">-->
+
+<!--		<label>Số điện thoại:</label>-->
+<!--		<input type="text" th:field="*{phone}" placeholder="Số điện thoại">-->
+
+<!--		<label>Địa chỉ:</label>-->
+<!--		<input type="text" th:field="*{address}" placeholder="Địa chỉ">-->
+
+<!--		<label>Giới thiệu bản thân:</label>-->
+<!--		<textarea th:field="*{summary}" rows="4" placeholder="Giới thiệu về bạn..."></textarea>-->
+
+<!--		<button type="submit">Lưu thay đổi</button>-->
+<!--	</form>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--	function goHome() {-->
+<!--		window.location.href = "/dashboardCandidate";-->
+<!--	}-->
+
+<!--	function toggleSubMenu(id) {-->
+<!--		const submenu = document.getElementById(id);-->
+<!--		submenu.classList.toggle("submenu-active");-->
+<!--		submenu.style.display = submenu.style.display === "block" ? "none" : "block";-->
+<!--	}-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+

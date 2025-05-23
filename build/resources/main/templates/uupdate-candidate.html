@@ -15,6 +15,7 @@
             background-color: #007bff;
             color: white;
             padding: 15px 20px;
+            text-align: left;
             font-size: 18px;
             width: 100%;
             position: fixed;
@@ -155,9 +156,43 @@
 </head>
 <body>
 
-<header>
-    <button class="home-button" onclick="goHome()">Trang Chủ</button>
+<header style="
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0080ff;
+  color: white;
+  padding: 7px 24px 7px 18px;  /* giảm padding */
+  font-size: 17px;             /* giảm font */
+  border-radius: 16px 16px 0 0;
+  height: 48px;                 /* thu nhỏ chiều cao */
+  box-sizing: border-box;
+">
+    <div style="font-weight: bold;">Trang Chủ</div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-weight: bold; white-space: nowrap;" th:text="${candidate.fullName}">Tên Ứng Viên</div>
+        <button onclick="logout()" style="
+      display: flex; align-items: center;
+      background: #fff;
+      color: #0080ff;
+      font-weight: 600;
+      border: none;
+      border-radius: 25px;
+      padding: 5px 15px;
+      margin-top: 0px;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+      transition: background 0.13s;
+      white-space: nowrap;
+    ">
+            <svg width="18" height="18" fill="currentColor" style="margin-right:5px;"><path d="M6 3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V4H8v14h6v-4a1 1 0 1 1 2 0v5a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3Zm12.707 7.707a1 1 0 0 0-1.414-1.414l-3 3a1 1 0 0 0 0 1.414l3 3a1 1 0 1 0 1.414-1.414L17.414 13H12a1 1 0 1 0 0 2h5.414l-1.707 1.707Z"/></svg>
+            Đăng xuất
+        </button>
+    </div>
 </header>
+
+
 
 <!-- Sidebar -->
 <div class="sidebar">
@@ -165,27 +200,24 @@
     <div id="submenu1" class="submenu">
         <a href="#">Tài khoản của bạn</a>
     </div>
-
     <a href="javascript:void(0);" onclick="toggleSubMenu('submenu2')">Quản lý hồ sơ</a>
     <div id="submenu2" class="submenu">
         <a href="/hoso-cua-ban">Hồ sơ của bạn</a>
-        <a href="/update-candidate">Cập nhật thông tin</a>
-    </div>
 
+    </div>
     <a href="javascript:void(0);" onclick="toggleSubMenu('submenu3')">Quản lý việc làm</a>
     <div id="submenu3" class="submenu">
         <a href="#">Việc làm đã ứng tuyển</a>
-        <a href="#">Việc làm đã lưu</a>
+        <a href="/vieclamdaluu">Việc làm đã lưu</a>
         <a href="#">Việc làm chờ ứng tuyển</a>
         <a href="#">Thông báo việc làm</a>
+        <a href="/Timkiemvieclam">Tìm kiếm việc làm</a>
     </div>
-
     <a href="javascript:void(0);" onclick="toggleSubMenu('submenu4')">Nhà tuyển dụng bạn quan tâm</a>
     <div id="submenu4" class="submenu">
         <a href="#">Nhà tuyển dụng xem hồ sơ bạn</a>
         <a href="#">Nhà tuyển dụng đang theo dõi</a>
     </div>
-
     <a href="javascript:void(0);" onclick="toggleSubMenu('submenu5')">Hỗ trợ và thông báo</a>
     <div id="submenu5" class="submenu">
         <a href="#">Việc làm 24h thông báo</a>
@@ -205,28 +237,37 @@
         <h2>Cập Nhật Thông Tin Cá Nhân</h2>
 
         <form th:action="@{/candidates/update/{id}(id=${candidate.canId})}" th:object="${candidate}" method="post">
+
             <label for="fullNameField">Họ và tên:</label>
-            <input type="text" id="fullNameField" th:field="*{fullName}" placeholder="Họ và tên" required>
+            <input type="text" id="fullNameField" th:field="*{fullName}" required>
 
             <label for="dobField">Ngày sinh:</label>
             <input type="date" id="dobField" th:field="*{dob}" required>
 
-            <label for="addressStreetField">Địa chỉ:</label>
-            <input type="text" id="addressStreetField" th:field="*{address.street}" placeholder="Đường" required>
-            <input type="text" id="addressCityField" th:field="*{address.city}" placeholder="Thành phố" required>
-            <input type="text" id="addressZipcodeField" th:field="*{address.zipcode}" placeholder="Mã bưu điện" required>
+            <label for="addressNumberField">Số nhà:</label>
+            <input type="text" id="addressNumberField" th:field="*{address.number}" required>
+
+            <label for="addressStreetField">Đường:</label>
+            <input type="text" id="addressStreetField" th:field="*{address.street}" required>
+
+            <label for="addressCityField">Thành phố:</label>
+            <input type="text" id="addressCityField" th:field="*{address.city}" required>
+
+            <label for="addressZipcodeField">Mã bưu điện:</label>
+            <input type="text" id="addressZipcodeField" th:field="*{address.zipcode}" required>
+
+            <label for="addressCountryField">Quốc gia:</label>
             <input type="text" id="addressCountryField" th:field="*{address.country}" placeholder="Quốc gia" required>
 
+
             <label for="phoneField">Số điện thoại:</label>
-            <input type="text" id="phoneField" th:field="*{phone}" placeholder="Số điện thoại" required>
+            <input type="text" id="phoneField" th:field="*{phone}" required>
 
             <label for="emailField">Email:</label>
-            <input type="email" id="emailField" th:field="*{email}" placeholder="Email" required>
+            <input type="email" id="emailField" th:field="*{email}" required>
 
             <label for="summaryField">Tóm tắt:</label>
-            <textarea id="summaryField" th:field="*{summary}" rows="4" placeholder="Giới thiệu về bạn..."></textarea>
-
-
+            <textarea id="summaryField" th:field="*{summary}" rows="4"></textarea>
 
             <button type="submit">Lưu thay đổi</button>
         </form>
@@ -242,6 +283,10 @@
         const submenu = document.getElementById(id);
         submenu.classList.toggle("active");
         submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+    }
+
+    function logout() {
+        window.location.href = "/";
     }
 </script>
 

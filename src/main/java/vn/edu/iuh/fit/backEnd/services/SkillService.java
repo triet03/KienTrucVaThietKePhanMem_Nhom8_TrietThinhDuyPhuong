@@ -67,4 +67,12 @@ public class SkillService {
         }
         return recommendedSkills;
     }
+    public List<Skill> getSkillsByCandidateId(Long candidateId) {
+        List<CandidateSkill> candidateSkills = candidateSkillRepository.findByCandidateCanId(candidateId);
+        List<Skill> skills = new ArrayList<>();
+        for (CandidateSkill cs : candidateSkills) {
+            skills.add(cs.getSkill());
+        }
+        return skills;
+    }
 }

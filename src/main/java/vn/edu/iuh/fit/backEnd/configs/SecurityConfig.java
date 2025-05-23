@@ -27,22 +27,32 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable() // ⚠️ Tắt CSRF nếu dùng fetch/ajax, bật lại nếu dùng form submit chuẩn
+                .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/companyManager", "/companyManager/**", "/{id}",
                                 "/verify", "/verify/company",
-                                "/register/**", "/register/send-code",     // ✅ Cho phép gửi mã không cần đăng nhập
-                                "/login/**",
+                                "/register/**", "/register/send-code",
+                                "/login/**", "/logout",  // ✅ Cho phép login/logout cho Candidate
                                 "/homeCompany", "/homeCandidate",
-                                "/jobs", "/jobs/**",
+
+                                // ✅ Mở toàn bộ route dành cho Candidate
+                                "/dashboardCandidate", "/tranghosonguoidung", "/hoso-cua-ban",
+                                "/hoso-candidate", "/save-job/**", "/vieclamdaluu",
+                                "/Timkiemvieclam", "/Timkiemvieclam/**",
+
+                                // ✅ Cho frontend load CSS/JS nếu có
                                 "/css/**", "/js/**"
                         ).permitAll()
+
+                        // ✅ Chỉ yêu cầu xác thực khi vào trang quản lý công ty
                         .requestMatchers("/company_mangement").authenticated()
-                        .anyRequest().authenticated()
+
+                        // Các request còn lại: cũng cho phép
+                        .anyRequest().permitAll()
                 )
                 .formLogin(login -> login
-//                        .loginPage("/login/company")
+                        .loginPage("/login/company") // dành cho công ty
                         .defaultSuccessUrl("/companyManage", true)
                         .permitAll()
                 )
@@ -54,6 +64,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public UserDetailsService userDetailsService() {
